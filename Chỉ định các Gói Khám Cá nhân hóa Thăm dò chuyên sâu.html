@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B4. Chỉ định các Gói Khám Cá nhân hóa & Thăm dò Chuyên sâu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h3 {
+            color: #34495e;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        h4 {
+            color: #34495e;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .section-purpose {
+            font-style: italic;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        .subsection-title {
+            color: #4CAF50;
+            font-weight: bold;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        textarea,
+        select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+        .checkbox-group label,
+        .radio-group label {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        .checkbox-group input[type="checkbox"],
+        .radio-group input[type="radio"] {
+            margin-right: 10px;
+            min-width: 20px;
+            min-height: 20px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            border: 2px solid #999;
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            top: 0;
+            left: 0;
+            background-color: #eee;
+        }
+        .checkbox-group input[type="checkbox"]:checked,
+        .radio-group input[type="radio"]:checked {
+            background-color: #3498db;
+            border-color: #3498db;
+        }
+        .checkbox-group input[type="checkbox"]:checked::before {
+            content: '✓';
+            display: block;
+            color: #fff;
+            font-size: 1.2rem;
+            line-height: 1;
+            text-align: center;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .radio-group input[type="radio"] {
+            border-radius: 50%;
+        }
+        .radio-group input[type="radio"]:checked::before {
+            content: '';
+            display: block;
+            width: 10px;
+            height: 10px;
+            background-color: #fff;
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .form-section-content {
+            border: 1px dashed #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .bold-text {
+            font-weight: bold;
+        }
+        .submit-button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            float: right;
+            margin-top: 20px;
+        }
+        .note {
+            background-color: #f0f8ff;
+            border-left: 5px solid #2196f3;
+            padding: 15px;
+            margin-top: 30px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>B4. Chỉ định các Gói Khám Cá nhân hóa & Thăm dò Chuyên sâu</h1>
+        <p class="section-purpose">Mục đích: Dựa trên kết quả sàng lọc tổng thể từ Bộ Câu Hỏi Sàng Lọc Sức Khỏe Toàn Diện (Mục A-I) và đánh giá lâm sàng ban đầu của Bác sĩ Lão khoa, xác định các thăm khám chuyên sâu, xét nghiệm, chẩn đoán hình ảnh, và gói dịch vụ phù hợp nhất cho từng người bệnh, đảm bảo tính cá nhân hóa và tối ưu hóa hiệu quả chăm sóc.</p>
+
+        <form action="#" method="post">
+            <h3>1. Đánh giá tổng hợp từ kết quả sàng lọc:</h3>
+            <p>Bác sĩ Lão khoa sẽ xem xét kỹ lưỡng bản tổng kết từ Mục I của Bộ Câu Hỏi Sàng Lọc, đặc biệt chú ý đến các "vấn đề sức khỏe/nguy cơ chính được sàng lọc". Kết hợp với thông tin lâm sàng thu thập được từ cuộc khám ban đầu (B3), bác sĩ sẽ xác định các lĩnh vực cần thăm dò sâu hơn.</p>
+            <textarea placeholder="Tóm tắt tổng hợp từ sàng lọc và khám ban đầu (từ Mục I Bộ câu hỏi sàng lọc)"></textarea>
+
+            <h3>2. Tiêu chí và Phác đồ chỉ định chi tiết:</h3>
+            <p>Dựa trên các mục trong bản "Đề xuất Khám Chuyên Sâu và Gói Dịch Vụ Cá Nhân Hóa", hãy chọn các chỉ định phù hợp:</p>
+
+            <div class="form-section-content">
+                <div class="subsection-title">2.1. Khám lâm sàng tổng quát & Đánh giá toàn diện</div>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="clsk_1_1"> Khám lâm sàng tổng quát toàn thân (tim, phổi, bụng, thần kinh cơ bản)</label>
+                    <label><input type="checkbox" name="clsk_1_2"> Đánh giá chức năng tổng thể (bao gồm các thang điểm chức năng nâng cao)</label>
+                    <label><input type="checkbox" name="clsk_1_3"> Sàng lọc đa bệnh lý và đa thuốc</label>
+                    <label><input type="checkbox" name="clsk_1_4"> Đánh giá môi trường sống tại nhà (nếu có thể)</label>
+                </div>
+            </div>
+
+            <div class="form-section-content">
+                <div class="subsection-title">2.2. Khám chuyên sâu dinh dưỡng & Can thiệp</div>
+                <p>Khi chỉ định:</p>
+                <ul>
+                    <li>Kết quả MNA-SF từ Mục E cho thấy <span class="bold-text">"Nguy cơ suy dinh dưỡng" (8-11 điểm)</span> hoặc <span class="bold-text">"Suy dinh dưỡng" (0-7 điểm)</span>.</li>
+                    <li>Có các vấn đề về tiêu hóa mãn tính (trào ngược dạ dày, táo bón mãn tính), khó nhai/nuốt, giảm cảm giác thèm ăn đáng kể.</li>
+                    <li>Bệnh nhân có sụt cân không chủ ý trong 3-6 tháng gần đây.</li>
+                    <li>Bệnh nhân có bệnh lý nền nặng cần chế độ ăn đặc biệt (VD: suy thận, đái tháo đường không kiểm soát).</li>
+                </ul>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="dd_2_1"> Đánh giá dinh dưỡng chi tiết (sử dụng MNA-SF và các công cụ khác)</label>
+                    <label><input type="checkbox" name="dd_2_2"> Tư vấn chế độ ăn cá nhân hóa (theo bệnh lý nền, khẩu vị, khả năng nhai nuốt)</label>
+                    <label><input type="checkbox" name="dd_2_3"> Bổ sung vi chất dinh dưỡng (vitamin D, Canxi, B12, v.v.)</label>
+                    <label><input type="checkbox" name="dd_2_4"> Hướng dẫn chế biến thức ăn phù hợp</label>
+                    <label><input type="checkbox" name="dd_2_5"> Theo dõi cân nặng và chỉ số BMI định kỳ</label>
+                </div>
+            </div>
+
+            <div class="form-section-content">
+                <div class="subsection-title">2.3. Đánh giá chi tiết nhận thức & Can thiệp</div>
+                <p>Khi chỉ định:</p>
+                <ul>
+                    <li>Bệnh nhân có trả lời "CÓ" cho câu "Bạn có cảm thấy mình có nhiều vấn đề về trí nhớ hơn hầu hết mọi người không?" trong GDS-SF.</li>
+                    <li>Bác sĩ Lão khoa nghi ngờ có suy giảm nhận thức qua thăm khám lâm sàng hoặc tổng kết sàng lọc.</li>
+                    <li>Tiền sử gia đình có sa sút trí tuệ/Alzheimer.</li>
+                    <li>Có các vấn đề thần kinh như sa sút trí tuệ nhẹ hoặc có vấn đề về hành vi.</li>
+                </ul>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="nt_3_1"> Đánh giá nhận thức chuyên sâu (MMSE/MoCA, hoặc Neuropsychological assessment)</label>
+                    <label><input type="checkbox" name="nt_3_2"> Sàng lọc và chẩn đoán sa sút trí tuệ (nếu có dấu hiệu)</label>
+                    <label><input type="checkbox" name="nt_3_3"> Tư vấn và hỗ trợ các bài tập rèn luyện trí não</label>
+                    <label><input type="checkbox" name="nt_3_4"> Hướng dẫn người nhà về cách chăm sóc và giao tiếp với người suy giảm nhận thức</label>
+                </div>
+            </div>
+
+            <div class="form-section-content">
+                <div class="subsection-title">2.4. Tư vấn tâm lý/chuyên khoa tâm thần & Hỗ trợ</div>
+                <p>Khi chỉ định:</p>
+                <ul>
+                    <li>Tổng điểm GDS-SF (Mục F) là <span class="bold-text">5 điểm trở lên</span> (trầm cảm nhẹ, vừa, nặng).</li>
+                    <li>Bệnh nhân có biểu hiện căng thẳng tinh thần, bệnh cấp tính trong 3 tháng qua.</li>
+                    <li>Có vấn đề về thần kinh như trầm cảm nặng hoặc rối loạn hành vi.</li>
+                    <li>Bệnh nhân cảm thấy cuộc sống trống rỗng, chán nản, vô vọng, bất lực.</li>
+                    <li>Bệnh nhân sống một mình, thiếu hoạt động xã hội.</li>
+                </ul>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="tl_4_1"> Tư vấn tâm lý cá nhân/nhóm</label>
+                    <label><input type="checkbox" name="tl_4_2"> Chỉ định và theo dõi điều trị thuốc (nếu cần)</label>
+                    <label><input type="checkbox" name="tl_4_3"> Hướng dẫn các kỹ thuật thư giãn, quản lý stress</label>
+                    <label><input type="checkbox" name="tl_4_4"> Hỗ trợ gia đình trong việc chăm sóc tâm lý người cao tuổi</label>
+                </div>
+            </div>
+
+            <div class="form-section-content">
+                <div class="subsection-title">2.5. Đánh giá và can thiệp nguy cơ té ngã</div>
+                <p>Khi chỉ định:</p>
+                <ul>
+                    <li>Có tiền sử té ngã <span class="bold-text">1 lần trở lên</span> trong 12 tháng qua.</li>
+                    <li>Kết quả TUG Test <span class="bold-text">> 12 giây</span>.</li>
+                    <li>Có cảm giác mất thăng bằng, chóng mặt, yếu chân, đi lại không vững.</li>
+                    <li>Đang dùng nhiều loại thuốc có thể ảnh hưởng đến thăng bằng.</li>
+                    <li>Môi trường sống có nhiều yếu tố nguy cơ té ngã.</li>
+                </ul>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="tn_5_1"> Đánh giá thăng bằng và dáng đi chuyên sâu (sử dụng các bài test nâng cao)</label>
+                    <label><input type="checkbox" name="tn_5_2"> Tư vấn và hướng dẫn các bài tập tăng cường sức mạnh cơ bắp và thăng bằng</label>
+                    <label><input type="checkbox" name="tn_5_3"> Đề xuất cải tạo môi trường sống an toàn tại nhà (lắp đặt tay vịn, chống trơn trượt)</label>
+                    <label><input type="checkbox" name="tn_5_4"> Kiểm tra và điều chỉnh thuốc có thể ảnh hưởng đến thăng bằng</label>
+                    <label><input type="checkbox" name="tn_5_5"> Tư vấn sử dụng dụng cụ hỗ trợ đi lại phù hợp</label>
+                </div>
+            </div>
+
+            <div class="form-section-content">
+                <div class="subsection-title">2.6. Khám chuyên khoa mắt/tai/răng hàm mặt</div>
+                <p>Khi chỉ định:</p>
+                <ul>
+                    <li>Thị lực/thính lực suy giảm đáng kể.</li>
+                    <li>Lần khám mắt/tai gần nhất <span class="bold-text">> 1 năm</span>.</li>
+                    <li>Vấn đề răng miệng (đau răng, sưng lợi, khó nhai) hoặc lần khám nha khoa gần nhất <span class="bold-text">> 6 tháng</span>.</li>
+                </ul>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="gq_6_1"> Khám mắt chuyên sâu (tầm soát đục thủy tinh thể, glôcôm, thoái hóa hoàng điểm)</label>
+                    <label><input type="checkbox" name="gq_6_2"> Khám tai mũi họng chuyên sâu (đánh giá thính lực, tư vấn máy trợ thính)</label>
+                    <label><input type="checkbox" name="gq_6_3"> Khám nha khoa định kỳ (kiểm tra răng thật, răng giả, vệ sinh răng miệng)</label>
+                </div>
+            </div>
+
+            <div class="form-section-content">
+                <div class="subsection-title">2.7. Xét nghiệm máu tổng quát & Chuyên sâu</div>
+                <p>Khi chỉ định:</p>
+                <ul>
+                    <li>Mọi bệnh nhân mới hoặc tái khám định kỳ (gói cơ bản).</li>
+                    <li>Có bệnh lý mãn tính (cao huyết áp, tiểu đường, bệnh thận, tuyến giáp, tim mạch...) để theo dõi tình trạng bệnh và điều chỉnh thuốc.</li>
+                    <li>Nghi ngờ suy dinh dưỡng (đo chỉ số vitamin, khoáng chất).</li>
+                    <li>Có các triệu chứng không rõ ràng hoặc nghi ngờ bệnh lý mới.</li>
+                </ul>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="xn_7_1"> Xét nghiệm công thức máu, chức năng gan, thận, đường huyết, mỡ máu cơ bản</label>
+                    <label><input type="checkbox" name="xn_7_2"> Xét nghiệm chuyên sâu theo chỉ định (ví dụ: hormone tuyến giáp, vitamin D, B12, điện giải đồ, dấu ấn ung thư)</label>
+                    <label><input type="checkbox" name="xn_7_3"> Kiểm tra chức năng tuyến giáp</label>
+                </div>
+            </div>
+
+            <div class="form-section-content">
+                <div class="subsection-title">2.8. Thăm dò chức năng & Chẩn đoán hình ảnh</div>
+                <p>Khi chỉ định:</p>
+                <ul>
+                    <li>Bệnh tim mạch (thiếu máu cơ tim, suy tim, rối loạn nhịp tim) để siêu âm tim, điện tim, Holter ECG.</li>
+                    <li>Tiền sử đột quỵ hoặc nguy cơ đột quỵ để siêu âm mạch cảnh.</li>
+                    <li>Nghi ngờ loãng xương để đo mật độ xương.</li>
+                    <li>Các vấn đề hô hấp mãn tính (COPD, hen suyễn) để đo chức năng hô hấp, X-quang phổi.</li>
+                    <li>Vấn đề tiêu hóa kéo dài để nội soi dạ dày/đại tràng (nếu cần).</li>
+                    <li>Vấn đề về xương khớp để chụp X-quang khớp.</li>
+                </ul>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="tdcn_8_1"> X-quang ngực, cột sống, khớp (nếu có chỉ định)</label>
+                    <label><input type="checkbox" name="tdcn_8_2"> Siêu âm tim, mạch cảnh, bụng tổng quát</label>
+                    <label><input type="checkbox" name="tdcn_8_3"> Điện tim (ECG) và Holter ECG 24-72 giờ (nếu có rối loạn nhịp)</label>
+                    <label><input type="checkbox" name="tdcn_8_4"> Đo mật độ xương (Densitometry)</label>
+                    <label><input type="checkbox" name="tdcn_8_5"> Nội soi tiêu hóa (nếu có vấn đề tiêu hóa kéo dài)</label>
+                </div>
+            </div>
+
+            <div class="form-section-content">
+                <div class="subsection-title">2.9. Tư vấn và hỗ trợ sinh hoạt hàng ngày</div>
+                <p>Khi chỉ định:</p>
+                <ul>
+                    <li>Bệnh nhân cần hỗ trợ một phần hoặc phụ thuộc hoàn toàn trong ADLs/IADLs.</li>
+                    <li>Có suy giảm vận động, sau đột quỵ/phẫu thuật.</li>
+                </ul>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="sh_9_1"> Hướng dẫn các kỹ năng tự chăm sóc cơ bản (ADLs)</label>
+                    <label><input type="checkbox" name="sh_9_2"> Hướng dẫn các kỹ năng sinh hoạt nâng cao (IADLs)</label>
+                    <label><input type="checkbox" name="sh_9_3"> Kết nối với các dịch vụ hỗ trợ tại nhà (điều dưỡng, vật lý trị liệu tại nhà)</label>
+                    <label><input type="checkbox" name="sh_9_4"> Tư vấn về các thiết bị hỗ trợ sinh hoạt</label>
+                </div>
+            </div>
+
+            <div class="form-section-content">
+                <div class="subsection-title">2.10. Các chỉ định khác (Theo cá thể hóa)</div>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="khac_10_1"> Tư vấn về tiêm chủng phòng ngừa (cúm, phế cầu, zona, uốn ván)</label>
+                    <label><input type="checkbox" name="khac_10_2"> Hướng dẫn về tập luyện thể dục phù hợp với thể trạng</label>
+                    <label><input type="checkbox" name="khac_10_3"> Tư vấn về quản lý bệnh lý mãn tính và tuân thủ điều trị</label>
+                    <label><input type="checkbox" name="khac_10_4"> Kết nối với các hoạt động xã hội, câu lạc bộ người cao tuổi</label>
+                    <label><input type="checkbox" name="khac_10_5"> Khác (ghi rõ):</label>
+                    <textarea name="khac_10_5_details" placeholder="Ghi rõ các chỉ định khác"></textarea>
+                </div>
+            </div>
+
+            <h3>3. Lựa chọn Gói Dịch vụ Tổng thể:</h3>
+            <p>Dựa trên tất cả các chỉ định chuyên sâu đã đưa ra, Bác sĩ Lão khoa sẽ tổng hợp để đề xuất một hoặc nhiều Gói Dịch vụ Lão khoa phù hợp nhất với tình trạng phân tầng nguy cơ của bệnh nhân.</p>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="goi_dv_1" value="Gói Khám Sàng Lọc Cơ Bản"> Gói Khám Sàng Lọc Cơ Bản: Phù hợp nếu chỉ có ít hoặc không có vấn đề nghiêm trọng, chủ yếu phòng ngừa.</label>
+                <label><input type="checkbox" name="goi_dv_2" value="Gói Khám Toàn Diện"> Gói Khám Toàn Diện: Khi có yếu tố nguy cơ hoặc bệnh mãn tính nhẹ, cần đánh giá chuyên sâu hơn.</label>
+                <label><input type="checkbox" name="goi_dv_3" value="Gói Theo Dõi và Quản Lý"> Gói Theo Dõi và Quản Lý: Dành cho người có nhiều bệnh mãn tính, cần theo dõi và điều chỉnh thuốc thường xuyên.</label>
+                <label><input type="checkbox" name="goi_dv_4" value="Gói Chăm sóc Đặc biệt tại Nhà"> Gói Chăm sóc Đặc biệt tại Nhà: Cho người trên 80 tuổi, đa bệnh lý, khó di chuyển.</label>
+                <label><input type="checkbox" name="goi_dv_5" value="Gói Loạn Nhịp Nguy Cơ Cao"> Gói Loạn Nhịp Nguy Cơ Cao: Dành riêng cho bệnh nhân tim mạch có vấn đề loạn nhịp.</label>
+                <label><input type="checkbox" name="goi_dv_6" value="Gói Phục Hồi Chức Năng"> Gói Phục Hồi Chức Năng: Sau đột quỵ/phẫu thuật hoặc suy giảm vận động.</label>
+                <label><input type="checkbox" name="goi_dv_7" value="Gói Sức khỏe Tâm thần"> Gói Sức khỏe Tâm thần: Dành cho bệnh nhân có rối loạn tâm lý/nhận thức.</label>
+                <label><input type="checkbox" name="goi_dv_8" value="Gói Phòng ngừa"> Gói Phòng ngừa: Tập trung vào các yếu tố nguy cơ lối sống.</label>
+            </div>
+            <textarea name="goi_dv_details" rows="3" placeholder="Ghi chú thêm về lựa chọn gói dịch vụ hoặc kết hợp các gói"></textarea>
+
+
+            <h3>4. Thảo luận và thống nhất với Bệnh nhân/Người nhà:</h3>
+            <p>Bác sĩ Lão khoa sẽ giải thích chi tiết về các chỉ định và gói dịch vụ đề xuất, mục đích của từng thăm khám, lợi ích và chi phí. Lắng nghe mong muốn và ưu tiên của bệnh nhân/người nhà để điều chỉnh kế hoạch cho phù hợp.</p>
+            <textarea name="discussion_notes" rows="3" placeholder="Ghi chú về cuộc thảo luận và sự đồng thuận của bệnh nhân/người nhà"></textarea>
+
+            <div class="note">
+                <p><span class="bold-text">Kết quả:</span> Một bản kế hoạch khám, thăm dò và chăm sóc cá nhân hóa, được bệnh nhân/người nhà đồng thuận, sẵn sàng cho các bước điều trị và theo dõi tiếp theo.</p>
+            </div>
+
+            <div class="form-footer">
+                <button type="submit" class="submit-button">Lưu Chỉ Định & Kế Hoạch</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
