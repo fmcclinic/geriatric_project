@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bộ Câu Hỏi Sàng Lọc Sức Khỏe Toàn Diện cho Người Cao Tuổi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h3 {
+            color: #34495e;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        h4 {
+            color: #34495e;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .section-purpose {
+            font-style: italic;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        .instructions {
+            background-color: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 15px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+        }
+        .instructions ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        input[type="tel"],
+        textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+            box-sizing: border-box; /* Include padding in width */
+        }
+        textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+        .checkbox-group, .radio-group {
+            margin-bottom: 15px;
+        }
+        .checkbox-group label, .radio-group label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-weight: normal; /* Override default label bold for options */
+            cursor: pointer;
+        }
+        .checkbox-group input[type="checkbox"],
+        .radio-group input[type="radio"] {
+            margin-right: 10px;
+            min-width: 20px; /* Larger tap target */
+            min-height: 20px; /* Larger tap target */
+            -webkit-appearance: none; /* Remove default checkbox style */
+            -moz-appearance: none;
+            appearance: none;
+            border: 2px solid #999;
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            top: 0;
+            left: 0;
+            background-color: #eee;
+        }
+        .checkbox-group input[type="checkbox"]:checked,
+        .radio-group input[type="radio"]:checked {
+            background-color: #3498db;
+            border-color: #3498db;
+        }
+        .checkbox-group input[type="checkbox"]:checked::before {
+            content: '✓';
+            display: block;
+            color: #fff;
+            font-size: 1.2rem;
+            line-height: 1;
+            text-align: center;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .radio-group input[type="radio"] {
+            border-radius: 50%; /* Make radios circular */
+        }
+        .radio-group input[type="radio"]:checked::before {
+            content: '';
+            display: block;
+            width: 10px;
+            height: 10px;
+            background-color: #fff;
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #555;
+        }
+        .note {
+            background-color: #f0f8ff;
+            border-left: 5px solid #2196f3;
+            padding: 15px;
+            margin-top: 30px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .form-footer {
+            text-align: right;
+            margin-top: 40px;
+        }
+        .form-footer input {
+            width: auto;
+            display: inline-block;
+            margin-left: 20px;
+        }
+        .sub-question {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        .indent-options {
+            margin-left: 30px;
+        }
+        .bold-text { /* New class for specific bolding */
+            font-weight: bold;
+        }
+        .summary-section {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        .summary-item {
+            margin-bottom: 15px;
+        }
+        .summary-item label {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bộ Câu Hỏi Sàng Lọc Sức Khỏe Toàn Diện cho Người Cao Tuổi</h1>
+
+        <p class="instructions">
+            Mục đích: Thu thập thông tin y tế, xã hội và chức năng ban đầu để đánh giá tổng thể tình trạng sức khỏe của người cao tuổi, từ đó định hướng các thăm khám chuyên sâu và xây dựng kế hoạch quản lý sức khỏe cá nhân hóa.
+        </p>
+        <div class="instructions">
+            <span class="bold-text">Hướng dẫn chung cho người thực hiện (Điều dưỡng/Kỹ thuật viên/Bác sĩ):</span>
+            <ul>
+                <li>Giới thiệu rõ ràng mục đích của việc sàng lọc.</li>
+                <li>Tạo không khí thoải mái, thân thiện, kiên nhẫn và tôn trọng người được hỏi.</li>
+                <li>Đảm bảo môi trường yên tĩnh, riêng tư.</li>
+                <li>Nếu người cao tuổi khó nghe, hãy nói rõ ràng, chậm rãi và lặp lại khi cần.</li>
+                <li>Ghi chú cẩn thận các câu trả lời và bất kỳ quan sát nào khác.</li>
+                <li>Đối với các công cụ chuẩn hóa (MNA-SF, GDS-SF, MMSE/MoCA), cần tuân thủ đúng quy trình chấm điểm.</li>
+            </ul>
+        </div>
+
+        <form action="#" method="post" id="screeningForm">
+            <section>
+                <h3>A. Thông Tin Hành Chính & Cơ Bản</h3>
+                <p class="section-purpose">Mục đích: Thu thập dữ liệu nhận dạng và các yếu tố xã hội ban đầu có thể ảnh hưởng đến sức khỏe và khả năng chăm sóc.</p>
+
+                <label for="fullName">Họ và tên:</label>
+                <input type="text" id="fullName" name="fullName" required>
+
+                <label for="dob">Ngày sinh (Ngày/Tháng/Năm):</label>
+                <input type="date" id="dob" name="dob" required>
+
+                <label for="age">Tuổi:</label>
+                <input type="number" id="age" name="age" min="0" max="150" required>
+
+                <div class="radio-group">
+                    <label>Giới tính:</label>
+                    <label><input type="radio" name="gender" value="Nam"> Nam</label>
+                    <label><input type="radio" name="gender" value="Nữ"> Nữ</label>
+                </div>
+
+                <label for="phoneNumber">Số điện thoại:</label>
+                <input type="tel" id="phoneNumber" name="phoneNumber">
+
+                <label for="address">Địa chỉ hiện tại:</label>
+                <textarea id="address" name="address"></textarea>
+
+                <h4>Người liên hệ khẩn cấp:</h4>
+                <label for="emergencyName">Họ và tên:</label>
+                <input type="text" id="emergencyName" name="emergencyName">
+
+                <label for="emergencyPhone">Số điện thoại:</label>
+                <input type="tel" id="emergencyPhone" name="emergencyPhone">
+
+                <div class="radio-group">
+                    <label>Quan hệ:</label>
+                    <label><input type="radio" name="emergencyRelation" value="Vợ/chồng"> Vợ/chồng</label>
+                    <label><input type="radio" name="emergencyRelation" value="Con"> Con</label>
+                    <label><input type="radio" name="emergencyRelation" value="Cháu"> Cháu</label>
+                    <label><input type="radio" name="emergencyRelation" value="Anh/Chị/Em"> Anh/Chị/Em</label>
+                    <label><input type="radio" name="emergencyRelation" value="Bạn bè"> Bạn bè</label>
+                    <label><input type="radio" name="emergencyRelation" value="Khác"> Khác (ghi rõ):</label>
+                    <textarea name="emergencyRelationOther" placeholder="Ghi rõ mối quan hệ"></textarea>
+                </div>
+
+                <div class="radio-group">
+                    <label>Tình trạng hôn nhân:</label>
+                    <label><input type="radio" name="maritalStatus" value="Độc thân"> Độc thân</label>
+                    <label><input type="radio" name="maritalStatus" value="Đã kết hôn"> Đã kết hôn</label>
+                    <label><input type="radio" name="maritalStatus" value="Ly thân"> Ly thân</label>
+                    <label><input type="radio" name="maritalStatus" value="Ly dị"> Ly dị</label>
+                    <label><input type="radio" name="maritalStatus" value="Góa bụa"> Góa bụa</label>
+                </div>
+
+                <div class="radio-group">
+                    <label>Trình độ học vấn cao nhất:</label>
+                    <label><input type="radio" name="educationLevel" value="Không đi học"> Không đi học</label>
+                    <label><input type="radio" name="educationLevel" value="Tiểu học"> Tiểu học</label>
+                    <label><input type="radio" name="educationLevel" value="Trung học cơ sở"> Trung học cơ sở</label>
+                    <label><input type="radio" name="educationLevel" value="Trung học phổ thông"> Trung học phổ thông</label>
+                    <label><input type="radio" name="educationLevel" value="Cao đẳng/Đại học"> Cao đẳng/Đại học</label>
+                    <label><input type="radio" name="educationLevel" value="Sau Đại học"> Sau Đại học</label>
+                </div>
+
+                <label for="occupation">Nghề nghiệp trước đây/hiện tại (nếu còn làm):</label>
+                <input type="text" id="occupation" name="occupation">
+
+                <div class="radio-group">
+                    <label>Bạn đang sống cùng với ai?</label>
+                    <label><input type="radio" name="livingArrangement" value="Một mình"> Một mình</label>
+                    <label><input type="radio" name="livingArrangement" value="Vợ/chồng"> Vợ/chồng</label>
+                    <label><input type="radio" name="livingArrangement" value="Con cái"> Con cái</label>
+                    <label><input type="radio" name="livingArrangement" value="Cháu"> Cháu</label>
+                    <label><input type="radio" name="livingArrangement" value="Bạn bè/Người thân khác"> Bạn bè/Người thân khác</label>
+                    <label><input type="radio" name="livingArrangement" value="Viện dưỡng lão/Cơ sở chăm sóc"> Viện dưỡng lão/Cơ sở chăm sóc</label>
+                    <label><input type="radio" name="livingArrangement" value="Khác"> Khác (ghi rõ):</label>
+                    <textarea name="livingArrangementOther" placeholder="Ghi rõ"></textarea>
+                </div>
+            </section>
+
+            <section>
+                <h3>B. Tình Trạng Sức Khỏe Chung & Tiền Sử Y Tế</h3>
+                <p class="section-purpose">Mục đích: Xác định các bệnh lý hiện tại, tiền sử bệnh và phẫu thuật quan trọng, lịch sử tiêm chủng để đánh giá nguy cơ và nhu cầu chăm sóc y tế.</p>
+
+                <p>Bạn có đang mắc (hoặc đã từng mắc) bất kỳ bệnh mãn tính nào sau đây không? (Vui lòng đánh dấu vào ô phù hợp, nếu có, vui lòng ghi rõ thời gian phát hiện và mức độ hiện tại nếu bạn biết. Ví dụ: Cao huyết áp - 10 năm - Đang uống thuốc ổn định ).</p>
+
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="chronicDisease" value="Cao huyết áp"> Cao huyết áp:</label>
+                    <input type="text" name="details_caoHuyetAp" placeholder="Thời gian phát hiện và mức độ hiện tại">
+
+                    <label><input type="checkbox" name="chronicDisease" value="Tiểu đường"> Tiểu đường:</label>
+                    <input type="text" name="details_tieuDuong" placeholder="Thời gian phát hiện và mức độ hiện tại">
+
+                    <label><input type="checkbox" name="chronicDisease" value="Bệnh tim mạch"> Bệnh tim mạch (ví dụ: thiếu máu cơ tim, suy tim, bệnh van tim, rối loạn nhịp tim):</label>
+                    <input type="text" name="details_benhTimMach" placeholder="Thời gian phát hiện và mức độ hiện tại">
+
+                    <label><input type="checkbox" name="chronicDisease" value="Bệnh hô hấp mãn tính"> Bệnh hô hấp mãn tính (ví dụ: COPD, hen suyễn, viêm phế quản mãn tính):</label>
+                    <input type="text" name="details_benhHoHapManTinh" placeholder="Thời gian phát hiện và mức độ hiện tại">
+
+                    <label><input type="checkbox" name="chronicDisease" value="Bệnh thận mãn tính"> Bệnh thận mãn tính:</label>
+                    <input type="text" name="details_benhThanManTinh" placeholder="Thời gian phát hiện và mức độ hiện tại">
+
+                    <label><input type="checkbox" name="chronicDisease" value="Viêm khớp/Thoái hóa khớp"> Viêm khớp/Thoái hóa khớp:</label>
+                    <input type="text" name="details_viemKhopThoaiHoaKhop" placeholder="Thời gian phát hiện và mức độ hiện tại">
+
+                    <label><input type="checkbox" name="chronicDisease" value="Loãng xương"> Loãng xương:</label>
+                    <input type="text" name="details_loangXuong" placeholder="Thời gian phát hiện và mức độ hiện tại">
+
+                    <label><input type="checkbox" name="chronicDisease" value="Bệnh tuyến giáp"> Bệnh tuyến giáp:</label>
+                    <input type="text" name="details_benhTuyenGiac" placeholder="Thời gian phát hiện và mức độ hiện tại">
+
+                    <label><input type="checkbox" name="chronicDisease" value="Ung thư"> Ung thư:</label>
+                    <input type="text" name="details_ungThu" placeholder="Ghi rõ loại và giai đoạn nếu biết">
+
+                    <label><input type="checkbox" name="chronicDisease" value="Đột quỵ"> Đột quỵ:</label>
+                    <input type="text" name="details_dotQuy" placeholder="Ghi rõ thời gian và di chứng nếu có">
+
+                    <label><input type="checkbox" name="chronicDisease" value="Bệnh Parkinson"> Bệnh Parkinson:</label>
+                    <input type="text" name="details_benhParkinson" placeholder="Thời gian phát hiện và mức độ hiện tại">
+
+                    <label><input type="checkbox" name="chronicDisease" value="Các vấn đề về tiêu hóa mãn tính"> Các vấn đề về tiêu hóa mãn tính (ví dụ: trào ngược dạ dày, táo bón mãn tính):</label>
+                    <input type="text" name="details_tieuHoaManTinh" placeholder="Thời gian phát hiện và mức độ hiện tại">
+
+                    <label><input type="checkbox" name="chronicDisease" value="Khác (bệnh mãn tính)"> Khác (ghi rõ):</label>
+                    <textarea name="details_khacBenhManTinh" placeholder="Ghi rõ bệnh mãn tính khác"></textarea>
+                </div>
+
+                <div class="radio-group">
+                    <label>Bạn đã từng phẫu thuật hoặc nhập viện trong 12 tháng qua vì lý do sức khỏe nào không?</label>
+                    <label><input type="radio" name="surgeryHospitalization" value="Có"> Có (Vui lòng ghi rõ lý do và thời gian):</label>
+                    <textarea name="details_surgeryHospitalization" placeholder="Lý do và thời gian"></textarea>
+                    <label><input type="radio" name="surgeryHospitalization" value="Không"> Không</label>
+                </div>
+
+                <h4>Tiền sử gia đình: Trong gia đình bạn (bố, mẹ, anh, chị, em ruột) có ai mắc các bệnh sau không?</h4>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="familyHistory" value="Tiểu đường"> Tiểu đường</label>
+                    <label><input type="checkbox" name="familyHistory" value="Bệnh tim mạch"> Bệnh tim mạch</label>
+                    <label><input type="checkbox" name="familyHistory" value="Ung thư"> Ung thư</label>
+                    <label><input type="checkbox" name="familyHistory" value="Đột quỵ"> Đột quỵ</label>
+                    <label><input type="checkbox" name="familyHistory" value="Sa sút trí tuệ/Alzheimer"> Sa sút trí tuệ/Alzheimer</label>
+                    <label><input type="checkbox" name="familyHistory" value="Khác (tiền sử gia đình)"> Khác (ghi rõ):</label>
+                    <textarea name="details_khacTienSuGiaDinh" placeholder="Ghi rõ tiền sử gia đình khác"></textarea>
+                </div>
+
+                <h4>Tiêm chủng: Bạn đã tiêm các loại vắc-xin nào sau đây và vào khoảng thời gian nào gần đây nhất?</h4>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="vaccine" value="Cúm"> Cúm:</label>
+                    <input type="text" name="year_Cúm" placeholder="Năm gần nhất">
+
+                    <label><input type="checkbox" name="vaccine" value="Phế cầu"> Phế cầu:</label>
+                    <input type="text" name="year_Phế_cầu" placeholder="Năm gần nhất">
+
+                    <label><input type="checkbox" name="vaccine" value="Uốn ván/Bạch hầu/Ho gà"> Uốn ván/Bạch hầu/Ho gà:</label>
+                    <input type="text" name="year_Uốn_ván/Bạch_hầu/Ho_gà" placeholder="Năm gần nhất">
+
+                    <label><input type="checkbox" name="vaccine" value="Zona (Herpes Zoster)"> Zona (Herpes Zoster):</label>
+                    <input type="text" name="year_Zona_Herpes_Zoster" placeholder="Năm gần nhất">
+
+                    <label><input type="checkbox" name="vaccine" value="Khác (vắc-xin)"> Khác:</label>
+                    <input type="text" name="details_Khác_vắc-xin" placeholder="Ghi rõ loại vắc-xin">
+                </div>
+            </section>
+
+            <section>
+                <h3>C. Quản Lý Thuốc & Chức Năng Giác Quan</h3>
+                <p class="section-purpose">Mục đích: Đánh giá khả năng tự quản lý thuốc và phát hiện các vấn đề về giác quan có thể ảnh hưởng đến chất lượng cuộc sống và an toàn.</p>
+
+                <div class="radio-group">
+                    <label>Bạn đang sử dụng tổng cộng bao nhiêu loại thuốc (bao gồm cả thuốc kê đơn, không kê đơn, thực phẩm chức năng, thảo dược)?</label>
+                    <p>(Nếu có thể, yêu cầu người bệnh mang theo tất cả các loại thuốc đang sử dụng)</p>
+                    <label><input type="radio" name="medicationCount" value="Dưới 3 loại"> Dưới 3 loại</label>
+                    <label><input type="radio" name="medicationCount" value="Từ 3-5 loại"> Từ 3-5 loại</label>
+                    <label><input type="radio" name="medicationCount" value="Trên 5 loại"> Trên 5 loại</label>
+                </div>
+
+                <div class="radio-group">
+                    <label>Bạn có gặp khó khăn trong việc quản lý và uống thuốc đúng liều lượng, đúng giờ không?</label>
+                    <label><input type="radio" name="medicationDifficulty" value="Có"> Có (Vui lòng giải thích cụ thể khó khăn là gì: quên thuốc, khó chia liều, không nhớ tên thuốc, khó đọc nhãn thuốc...):</label>
+                    <textarea name="details_medicationDifficulty" placeholder="Giải thích khó khăn"></textarea>
+                    <label><input type="radio" name="medicationDifficulty" value="Không"> Không</label>
+                </div>
+
+                <h4>Thị lực:</h4>
+                <div class="radio-group">
+                    <label>Bạn có cảm thấy thị lực của mình suy giảm (ví dụ: khó đọc sách báo, khó nhìn rõ mặt người, nhìn mờ) không?</label>
+                    <label><input type="radio" name="visionImpairment" value="Có"> Có</label>
+                    <label><input type="radio" name="visionImpairment" value="Không"> Không</label>
+                    <label><input type="radio" name="visionImpairment" value="Đang sử dụng kính/kính áp tròng và đã điều chỉnh phù hợp"> Đang sử dụng kính/kính áp tròng và đã điều chỉnh phù hợp</label>
+                </div>
+                <label for="lastEyeExam">Lần khám mắt gần nhất của bạn là khi nào? (Nếu đã lâu > 1 năm, cần tư vấn đi khám)</label>
+                <input type="text" id="lastEyeExam" name="lastEyeExam" placeholder="Ngày/Tháng/Năm">
+
+                <h4>Thính lực:</h4>
+                <div class="radio-group">
+                    <label>Bạn có gặp khó khăn khi nghe (ví dụ: khó nghe cuộc trò chuyện trong môi trường ồn ào, cần bật TV lớn tiếng, người khác thường xuyên phải lặp lại lời nói) không?</label>
+                    <label><input type="radio" name="hearingDifficulty" value="Có"> Có</label>
+                    <label><input type="radio" name="hearingDifficulty" value="Không"> Không</label>
+                    <label><input type="radio" name="hearingDifficulty" value="Đang sử dụng máy trợ thính"> Đang sử dụng máy trợ thính</label>
+                </div>
+                <label for="lastEarExam">Lần khám tai gần nhất của bạn là khi nào? (Nếu đã lâu > 1 năm, cần tư vấn đi khám)</label>
+                <input type="text" id="lastEarExam" name="lastEarExam" placeholder="Ngày/Tháng/Năm">
+
+                <h4>Sức khỏe răng miệng:</h4>
+                <div class="radio-group">
+                    <label>Bạn có đang gặp vấn đề về răng miệng (ví dụ: đau răng, sưng lợi, chảy máu chân răng, khó nhai thức ăn) không?</label>
+                    <label><input type="radio" name="dentalProblem" value="Có"> Có</label>
+                    <label><input type="radio" name="dentalProblem" value="Không"> Không</label>
+                    <label><input type="radio" name="dentalProblem" value="Đang sử dụng răng giả và cảm thấy thoải mái"> Đang sử dụng răng giả và cảm thấy thoải mái</label>
+                </div>
+                <label for="lastDentalExam">Lần khám nha khoa gần nhất của bạn là khi nào? (Nếu đã lâu > 6 tháng, cần tư vấn đi khám)</label>
+                <input type="text" id="lastDentalExam" name="lastDentalExam" placeholder="Ngày/Tháng/Năm">
+            </section>
+
+            <section>
+                <h3>D. Đánh Giá Khả Năng Sinh Hoạt Hàng Ngày (ADLs & IADLs)</h3>
+                <p class="section-purpose">Mục đích: Đánh giá mức độ độc lập của người cao tuổi trong các hoạt động sinh hoạt cơ bản và nâng cao, từ đó xác định nhu cầu hỗ trợ và chăm sóc.</p>
+                <p><span class="bold-text">Hướng dẫn:</span> Vui lòng đánh giá khả năng tự thực hiện các hoạt động sau trong tháng vừa qua:</p>
+                <ul>
+                    <li><span class="bold-text">Độc lập:</span> Tự làm hoàn toàn, không cần bất kỳ sự giúp đỡ nào.</li>
+                    <li><span class="bold-text">Cần hỗ trợ một phần:</span> Cần người giúp đỡ một chút, nhắc nhở hoặc sử dụng dụng cụ hỗ trợ.</li>
+                    <li><span class="bold-text">Phụ thuộc hoàn toàn:</span> Cần người khác làm thay hoặc không thể thực hiện được.</li>
+                </ul>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Hoạt động</th>
+                            <th>Độc lập</th>
+                            <th>Cần hỗ trợ một phần</th>
+                            <th>Phụ thuộc hoàn toàn</th>
+                            <th>Ghi chú (nếu có)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="5"><span class="bold-text">I. Hoạt động sinh hoạt hàng ngày cơ bản (ADLs - Thang điểm Katz)</span></td></tr>
+                        <tr>
+                            <td>1. Tắm rửa: Bạn có tự tắm rửa được không?</td>
+                            <td><input type="radio" name="adl_1" value="Độc lập"></td>
+                            <td><input type="radio" name="adl_1" value="Cần hỗ trợ một phần"></td>
+                            <td><input type="radio" name="adl_1" value="Phụ thuộc hoàn toàn"></td>
+                            <td><input type="text" name="note_adl_1"></td>
+                        </tr>
+                        <tr>
+                            <td>2. Mặc quần áo: Bạn có tự mặc quần áo được không?</td>
+                            <td><input type="radio" name="adl_2" value="Độc lập"></td>
+                            <td><input type="radio" name="adl_2" value="Cần hỗ trợ một phần"></td>
+                            <td><input type="radio" name="adl_2" value="Phụ thuộc hoàn toàn"></td>
+                            <td><input type="text" name="note_adl_2"></td>
+                        </tr>
+                        <tr>
+                            <td>3. Đi vệ sinh: Bạn có tự đi vệ sinh và tự lau rửa sau đó được không?</td>
+                            <td><input type="radio" name="adl_3" value="Độc lập"></td>
+                            <td><input type="radio" name="adl_3" value="Cần hỗ trợ một phần"></td>
+                            <td><input type="radio" name="adl_3" value="Phụ thuộc hoàn toàn"></td>
+                            <td><input type="text" name="note_adl_3"></td>
+                        </tr>
+                        <tr>
+                            <td>4. Ăn uống: Bạn có tự lấy thức ăn và tự đưa vào miệng được không?</td>
+                            <td><input type="radio" name="adl_4" value="Độc lập"></td>
+                            <td><input type="radio" name="adl_4" value="Cần hỗ trợ một phần"></td>
+                            <td><input type="radio" name="adl_4" value="Phụ thuộc hoàn toàn"></td>
+                            <td><input type="text" name="note_adl_4"></td>
+                        </tr>
+                        <tr>
+                            <td>5. Di chuyển: Bạn có tự đi lại trong nhà hoặc tự đứng dậy từ ghế/giường được không?</td>
+                            <td><input type="radio" name="adl_5" value="Độc lập"></td>
+                            <td><input type="radio" name="adl_5" value="Cần hỗ trợ một phần"></td>
+                            <td><input type="radio" name="adl_5" value="Phụ thuộc hoàn toàn"></td>
+                            <td><input type="text" name="note_adl_5"></td>
+                        </tr>
+                        <tr>
+                            <td>6. Kiểm soát đại/tiểu tiện: Bạn có kiểm soát được việc đi đại/tiểu tiện không (không bị són)?</td>
+                            <td><input type="radio" name="adl_6" value="Độc lập"></td>
+                            <td><input type="radio" name="adl_6" value="Cần hỗ trợ một phần"></td>
+                            <td><input type="radio" name="adl_6" value="Phụ thuộc hoàn toàn"></td>
+                            <td><input type="text" name="note_adl_6"></td>
+                        </tr>
+                        <tr><td colspan="5"><span class="bold-text">II. Hoạt động sinh hoạt hàng ngày nâng cao (IADLs - Thang điểm Lawton)</span></td></tr>
+                        <tr>
+                            <td>7. Sử dụng điện thoại: Bạn có thể tự gọi/nhận điện thoại được không?</td>
+                            <td><input type="radio" name="iadl_7" value="Độc lập"></td>
+                            <td><input type="radio" name="iadl_7" value="Cần hỗ trợ một phần"></td>
+                            <td><input type="radio" name="iadl_7" value="Phụ thuộc hoàn toàn"></td>
+                            <td><input type="text" name="note_iadl_7"></td>
+                        </tr>
+                        <tr>
+                            <td>8. Mua sắm: Bạn có tự đi mua sắm những vật dụng cần thiết được không?</td>
+                            <td><input type="radio" name="iadl_8" value="Độc lập"></td>
+                            <td><input type="radio" name="iadl_8" value="Cần hỗ trợ một phần"></td>
+                            <td><input type="radio" name="iadl_8" value="Phụ thuộc hoàn toàn"></td>
+                            <td><input type="text" name="note_iadl_8"></td>
+                        </tr>
+                        <tr>
+                            <td>9. Nấu ăn: Bạn có tự chuẩn bị bữa ăn đầy đủ được không?</td>
+                            <td><input type="radio" name="iadl_9" value="Độc lập"></td>
+                            <td><input type="radio" name="iadl_9" value="Cần hỗ trợ một phần"></td>
+                            <td><input type="radio" name="iadl_9" value="Phụ thuộc hoàn toàn"></td>
+                            <td><input type="text" name="note_iadl_9"></td>
+                        </tr>
+                        <tr>
+                            <td>10. Dọn dẹp nhà cửa: Bạn có tự làm các công việc nhà (lau dọn, sắp xếp) được không?</td>
+                            <td><input type="radio" name="iadl_10" value="Độc lập"></td>
+                            <td><input type="radio" name="iadl_10" value="Cần hỗ trợ một phần"></td>
+                            <td><input type="radio" name="iadl_10" value="phuThuocHoanToan"></td>
+                            <td><input type="text" name="note_iadl_10"></td>
+                        </tr>
+                        <tr>
+                            <td>11. Giặt giũ quần áo: Bạn có tự giặt giũ quần áo được không?</td>
+                            <td><input type="radio" name="iadl_11" value="Độc lập"></td>
+                            <td><input type="radio" name="iadl_11" value="Cần hỗ trợ một phần"></td>
+                            <td><input type="radio" name="iadl_11" value="Phụ thuộc hoàn toàn"></td>
+                            <td><input type="text" name="note_iadl_11"></td>
+                        </tr>
+                        <tr>
+                            <td>12. Quản lý tiền bạc: Bạn có tự quản lý tài chính (thanh toán hóa đơn, chi tiêu) được không?</td>
+                            <td><input type="radio" name="iadl_12" value="Độc lập"></td>
+                            <td><input type="radio" name="iadl_12" value="Cần hỗ trợ một phần"></td>
+                            <td><input type="radio" name="iadl_12" value="Phụ thuộc hoàn toàn"></td>
+                            <td><input type="text" name="note_iadl_12"></td>
+                        </tr>
+                        <tr>
+                            <td>13. Sử dụng phương tiện đi lại: Bạn có tự đi lại bằng phương tiện giao thông công cộng hoặc tự lái xe được không?</td>
+                            <td><input type="radio" name="iadl_13" value="Độc lập"></td>
+                            <td><input type="radio" name="iadl_13" value="Cần hỗ trợ một phần"></td>
+                            <td><input type="radio" name="iadl_13" value="Phụ thuộc hoàn toàn"></td>
+                            <td><input type="text" name="note_iadl_13"></td>
+                        </tr>
+                        <tr>
+                            <td>14. Uống thuốc đúng theo chỉ dẫn: Bạn có tự nhớ và uống thuốc đúng giờ, đúng liều không?</td>
+                            <td><input type="radio" name="iadl_14" value="Độc lập"></td>
+                            <td><input type="radio" name="iadl_14" value="Cần hỗ trợ một phần"></td>
+                            <td><input type="radio" name="iadl_14" value="Phụ thuộc hoàn toàn"></td>
+                            <td><input type="text" name="note_iadl_14"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section>
+                <h3>E. Đánh Giá Tình Trạng Dinh Dưỡng (MNA-SF)</h3>
+                <p class="section-purpose">Mục đích: Sàng lọc nguy cơ suy dinh dưỡng, một vấn đề phổ biến và thường bị bỏ sót ở người cao tuổi.</p>
+                <p><span class="bold-text">Hướng dẫn:</span> Vui lòng hỏi trực tiếp người cao tuổi (hoặc người chăm sóc nếu người bệnh không thể trả lời chính xác). Ghi điểm vào ô tương ứng.</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Câu hỏi (MNA-SF)</th>
+                            <th>Điểm</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1. Bạn có bị giảm cảm giác thèm ăn, gặp vấn đề về tiêu hóa, khó nhai nuốt trong 3 tháng qua không?</td>
+                            <td>
+                                <label><input type="radio" name="mna_q1" value="0"> 0: Giảm cảm giác thèm ăn nhiều; khó tiêu hóa/khó nhai/khó nuốt nghiêm trọng.</label>
+                                <label><input type="radio" name="mna_q1" value="1"> 1: Giảm cảm giác thèm ăn vừa phải; khó tiêu hóa/khó nhai/khó nuốt vừa phải.</label>
+                                <label><input type="radio" name="mna_q1" value="2"> 2: Không bị giảm cảm giác thèm ăn; không có vấn đề về tiêu hóa/nhai/nuốt.</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2. Bạn có bị sụt cân trong 3 tháng qua không?</td>
+                            <td>
+                                <label><input type="radio" name="mna_q2" value="0"> 0: Giảm cân > 3 kg.</label>
+                                <label><input type="radio" name="mna_q2" value="1"> 1: Giảm cân không rõ ràng (người bệnh không biết hoặc không chắc chắn).</label>
+                                <label><input type="radio" name="mna_q2" value="2"> 2: Giảm cân từ 1-3 kg.</label>
+                                <label><input type="radio" name="mna_q2" value="3"> 3: Không sụt cân.</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3. Bạn có khả năng di chuyển độc lập không?</td>
+                            <td>
+                                <label><input type="radio" name="mna_q3" value="0"> 0: Nằm liệt giường hoặc ngồi xe lăn.</label>
+                                <label><input type="radio" name="mna_q3" value="1"> 1: Đi lại được nhưng có giới hạn (ví dụ: chỉ đi lại trong nhà, cần gậy/người hỗ trợ).</label>
+                                <label><input type="radio" name="mna_q3" value="2"> 2: Đi lại độc lập.</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4. Bạn có bị căng thẳng tinh thần hoặc bệnh cấp tính (ví dụ: cảm cúm nặng, nhiễm trùng) trong 3 tháng qua không?</td>
+                            <td>
+                                <label><input type="radio" name="mna_q4" value="0"> 0: Có.</label>
+                                <label><input type="radio" name="mna_q4" value="2"> 2: Không.</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>5. Bạn có bị các vấn đề về thần kinh (ví dụ: sa sút trí tuệ, trầm cảm nặng, rối loạn hành vi) không?</td>
+                            <td>
+                                <label><input type="radio" name="mna_q5" value="0"> 0: Sa sút trí tuệ nặng hoặc trầm cảm nặng.</label>
+                                <label><input type="radio" name="mna_q5" value="1"> 1: Sa sút trí tuệ nhẹ hoặc có vấn đề về hành vi.</label>
+                                <label><input type="radio" name="mna_q5" value="2"> 2: Không có vấn đề về thần kinh.</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>6. Chỉ số khối cơ thể (BMI) của bạn là bao nhiêu? Hoặc chu vi bắp chân của bạn là bao nhiêu? (Nếu không đo được BMI)</td>
+                            <td>
+                                <label><input type="radio" name="mna_q6" value="0"> 0: BMI < 19 (hoặc chu vi bắp chân < 31 cm).</label>
+                                <label><input type="radio" name="mna_q6" value="1"> 1: BMI 19-21 (hoặc chu vi bắp chân ≥ 31 cm).</label>
+                                <label><input type="radio" name="mna_q6" value="2"> 2: BMI 21-23.</label>
+                                <label><input type="radio" name="mna_q6" value="3"> 3: BMI > 23.</label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p><span class="bold-text">Tổng điểm MNA-SF:</span> <input type="text" id="mnaTotalScore" name="mnaTotalScore" size="5" readonly></p>
+                <p><span class="bold-text">Đánh giá:</span></p>
+                <ul id="mnaAssessmentSummary">
+                    <li><span class="bold-text">12-14 điểm:</span> Tình trạng dinh dưỡng tốt.</li>
+                    <li><span class="bold-text">8-11 điểm:</span> Nguy cơ suy dinh dưỡng (cần theo dõi và tư vấn dinh dưỡng).</li>
+                    <li><span class="bold-text">0-7 điểm:</span> Suy dinh dưỡng (cần can thiệp dinh dưỡng chuyên sâu).</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>F. Sàng Lọc Tâm Lý & Nhận Thức</h3>
+                <p class="section-purpose">Mục đích: Phát hiện sớm các dấu hiệu trầm cảm và suy giảm nhận thức, là hai vấn đề sức khỏe tâm thần phổ biến và cần được quan tâm ở người cao tuổi.</p>
+
+                <h4>Thang Điểm Sàng Lọc Trầm Cảm (GDS-SF) cho Người Cao Tuổi</h4>
+                <p><span class="bold-text">Hướng dẫn cho người thực hiện:</span></p>
+                <ul>
+                    <li><span class="bold-text">Hỏi trực tiếp</span> người cao tuổi từng câu một.</li>
+                    <li>Yêu cầu họ trả lời <span class="bold-text">"CÓ"</span> hoặc <span class="bold-text">"KHÔNG"</span> dựa trên cảm nhận của bản thân <span class="bold-text">trong tuần vừa qua</span>.</li>
+                    <li><span class="bold-text">Chấm điểm:</span> Mỗi câu trả lời được đánh dấu `(*)` sẽ được tính <span class="bold-text">1 điểm</span>.</li>
+                </ul>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Câu hỏi (GDS-SF)</th>
+                            <th>CÓ</th>
+                            <th>KHÔNG</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Bạn có hài lòng với cuộc sống của mình không?</td>
+                            <td><input type="radio" name="gds_q1" value="0"></td>
+                            <td><input type="radio" name="gds_q1" value="1"> `(*)`</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Bạn có bỏ nhiều hoạt động và sở thích của mình không?</td>
+                            <td><input type="radio" name="gds_q2" value="1"> `(*)`</td>
+                            <td><input type="radio" name="gds_q2" value="0"></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Bạn có cảm thấy cuộc sống trống rỗng không?</td>
+                            <td><input type="radio" name="gds_q3" value="1"> `(*)`</td>
+                            <td><input type="radio" name="gds_q3" value="0"></td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Bạn có thường xuyên thấy chán nản không?</td>
+                            <td><input type="radio" name="gds_q4" value="1"> `(*)`</td>
+                            <td><input type="radio" name="gds_q4" value="0"></td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Bạn có lo sợ rằng điều gì đó tệ hại sẽ xảy ra với mình không?</td>
+                            <td><input type="radio" name="gds_q5" value="1"> `(*)`</td>
+                            <td><input type="radio" name="gds_q5" value="0"></td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>Bạn có cảm thấy vô dụng theo cách mình đang sống bây giờ không?</td>
+                            <td><input type="radio" name="gds_q6" value="1"> `(*)`</td>
+                            <td><input type="radio" name="gds_q6" value="0"></td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>Bạn có cảm thấy hạnh phúc không?</td>
+                            <td><input type="radio" name="gds_q7" value="0"></td>
+                            <td><input type="radio" name="gds_q7" value="1"> `(*)`</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>Bạn có thấy bất lực không?</td>
+                            <td><input type="radio" name="gds_q8" value="1"> `(*)`</td>
+                            <td><input type="radio" name="gds_q8" value="0"></td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>Bạn có thích ở nhà hơn là đi ra ngoài và làm những điều mới không?</td>
+                            <td><input type="radio" name="gds_q9" value="1"> `(*)`</td>
+                            <td><input type="radio" name="gds_q9" value="0"></td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>Bạn có cảm thấy mình có nhiều vấn đề về trí nhớ hơn hầu hết mọi người không?</td>
+                            <td><input type="radio" name="gds_q10" value="1"> `(*)`</td>
+                            <td><input type="radio" name="gds_q10" value="0"></td>
+                        </tr>
+                        <tr>
+                            <td>11</td>
+                            <td>Bạn có nghĩ rằng cuộc sống của mình thật tuyệt vời không?</td>
+                            <td><input type="radio" name="gds_q11" value="0"></td>
+                            <td><input type="radio" name="gds_q11" value="1"> `(*)`</td>
+                        </tr>
+                        <tr>
+                            <td>12</td>
+                            <td>Bạn có cảm thấy tràn đầy năng lượng không?</td>
+                            <td><input type="radio" name="gds_q12" value="0"></td>
+                            <td><input type="radio" name="gds_q12" value="1"> `(*)`</td>
+                        </tr>
+                        <tr>
+                            <td>13</td>
+                            <td>Bạn có cảm thấy cuộc sống của mình là vô vọng không?</td>
+                            <td><input type="radio" name="gds_q13" value="1"> `(*)`</td>
+                            <td><input type="radio" name="gds_q13" value="0"></td>
+                        </tr>
+                        <tr>
+                            <td>14</td>
+                            <td>Bạn có nghĩ rằng hầu hết mọi người tốt hơn bạn không?</td>
+                            <td><input type="radio" name="gds_q14" value="1"> `(*)`</td>
+                            <td><input type="radio" name="gds_q14" value="0"></td>
+                        </tr>
+                        <tr>
+                            <td>15</td>
+                            <td>Bạn có cảm thấy dễ buồn bã và khó chịu không?</td>
+                            <td><input type="radio" name="gds_q15" value="1"> `(*)`</td>
+                            <td><input type="radio" name="gds_q15" value="0"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p><span class="bold-text">Tổng điểm GDS-SF:</span> <input type="text" id="gdsTotalScore" name="gdsTotalScore" size="5" readonly></p>
+                <p><span class="bold-text">Đánh giá nguy cơ trầm cảm:</span></p>
+                <ul id="gdsAssessmentSummary">
+                    <li><span class="bold-text">0-4 điểm:</span> Bình thường (ít hoặc không có trầm cảm).</li>
+                    <li><span class="bold-text">5-8 điểm:</span> Trầm cảm nhẹ (cần theo dõi và tư vấn).</li>
+                    <li><span class="bold-text">9-11 điểm:</span> Trầm cảm vừa (cần thăm khám chuyên khoa tâm thần).</li>
+                    <li><span class="bold-text">12-15 điểm:</span> Trầm cảm nặng (cần can thiệp y tế khẩn cấp nếu có dấu hiệu nguy hiểm).</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>G. Sàng Lọc Nguy Cơ Té Ngã</h3>
+                <p class="section-purpose">Mục đích: Xác định các yếu tố nguy cơ té ngã và đánh giá mức độ thăng bằng, giúp đưa ra các biện pháp phòng ngừa kịp thời.</p>
+
+                <div class="radio-group">
+                    <label>Trong 12 tháng qua, bạn đã bị té ngã bao nhiêu lần?</label>
+                    <label><input type="radio" name="fallCount" value="0 lần"> 0 lần</label>
+                    <label><input type="radio" name="fallCount" value="1 lần"> 1 lần</label>
+                    <label><input type="radio" name="fallCount" value="2 lần trở lên"> 2 lần trở lên</label>
+                </div>
+
+                <div class="radio-group">
+                    <label>Nếu có té ngã, lần té ngã đó có gây chấn thương (ví dụ: gãy xương, vết bầm lớn, phải nhập viện, cần đi khám bác sĩ) không?</label>
+                    <label><input type="radio" name="fallInjury" value="Có"> Có</label>
+                    <label><input type="radio" name="fallInjury" value="Không"> Không</label>
+                    <label><input type="radio" name="fallInjury" value="Không áp dụng"> Không áp dụng (chưa từng té ngã)</label>
+                </div>
+
+                <div class="radio-group">
+                    <label>Bạn có thường xuyên cảm thấy mất thăng bằng, chóng mặt hoặc choáng váng khi đi lại, đứng lên đột ngột, hoặc thay đổi tư thế không?</label>
+                    <label><input type="radio" name="balanceDizziness" value="Có, thường xuyên"> Có, thường xuyên</label>
+                    <label><input type="radio" name="balanceDizziness" value="Đôi khi"> Đôi khi</label>
+                    <label><input type="radio" name="balanceDizziness" value="Không"> Không</label>
+                </div>
+
+                <div class="radio-group">
+                    <label>Bạn có cảm thấy yếu ở chân hoặc đi lại không vững không?</label>
+                    <label><input type="radio" name="legWeakness" value="Có"> Có</label>
+                    <label><input type="radio" name="legWeakness" value="Không"> Không</label>
+                </div>
+
+                <div class="radio-group">
+                    <label>Bạn có cần sử dụng dụng cụ hỗ trợ nào khi đi lại (ví dụ: gậy, khung tập đi, nạng) không?</label>
+                    <label><input type="radio" name="assistiveDevice" value="Có"> Có (Vui lòng ghi rõ loại dụng cụ):</label>
+                    <input type="text" name="details_assistiveDevice" placeholder="Ghi rõ loại dụng cụ">
+                    <label><input type="radio" name="assistiveDevice" value="Không"> Không</label>
+                </div>
+
+                <div class="radio-group">
+                    <label>Bạn có đang dùng nhiều loại thuốc có thể gây buồn ngủ, chóng mặt hoặc ảnh hưởng đến thăng bằng (ví dụ: thuốc an thần, thuốc huyết áp, thuốc ngủ) không? (Tham khảo danh sách thuốc đã khai ở Mục C)</label>
+                    <label><input type="radio" name="medicationEffectBalance" value="Có"> Có</label>
+                    <label><input type="radio" name="medicationEffectBalance" value="Không"> Không</label>
+                </div>
+
+                <h4>Môi trường sống của bạn có các yếu tố nào sau đây có thể làm tăng nguy cơ té ngã không? (Có thể hỏi thêm hoặc tự quan sát nếu có)</h4>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="environmentalFactors" value="Sàn nhà trơn trượt"> Sàn nhà trơn trượt (đặc biệt trong nhà tắm, khu vực bếp)</label>
+                    <label><input type="checkbox" name="environmentalFactors" value="Thảm trải sàn không cố định/dễ vấp"> Thảm trải sàn không cố định/dễ vấp</label>
+                    <label><input type="checkbox" name="environmentalFactors" value="Thiếu ánh sáng đủ"> Thiếu ánh sáng đủ ở hành lang, cầu thang, nhà vệ sinh</label>
+                    <label><input type="checkbox" name="environmentalFactors" value="Dây điện vướng víu"> Dây điện vướng víu trên lối đi</label>
+                    <label><input type="checkbox" name="environmentalFactors" value="Không có tay vịn an toàn"> Không có tay vịn an toàn ở cầu thang/nhà tắm/nhà vệ sinh</label>
+                    <label><input type="checkbox" name="environmentalFactors" value="Đồ đạc lộn xộn/khó đi lại"> Đồ đạc lộn xộn/khó đi lại</label>
+                    <label><input type="checkbox" name="environmentalFactors" value="Không có yếu tố nào"> Không có yếu tố nào</label>
+                </div>
+
+                <h4>Bài kiểm tra chức năng đơn giản:</h4>
+                <p><span class="bold-text">Timed Up and Go (TUG) Test:</span> (Người thực hiện sẽ yêu cầu người cao tuổi thực hiện)</p>
+                <ul>
+                    <li><span class="bold-text">Hướng dẫn:</span> Người cao tuổi ngồi trên ghế có tay vịn. Khi có hiệu lệnh "Bắt đầu", hãy đứng dậy, đi bộ 3 mét, quay lại, và ngồi xuống ghế.</li>
+                    <li><label for="tugTime">Thời gian hoàn thành:</label> <input type="number" id="tugTime" name="tugTime" min="0" step="0.1" size="5"> giây</li>
+                    <li><span class="bold-text">Đánh giá:</span>
+                        <ul id="tugAssessmentSummary">
+                            <li>≤ 12 giây: Nguy cơ té ngã thấp.</li>
+                            <li>> 12 giây: Nguy cơ té ngã tăng đáng kể (cần đánh giá thăng bằng và dáng đi chuyên sâu).</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <p><span class="bold-text">One-Leg Stand Test (Nếu người bệnh đủ sức khỏe và an toàn):</span></p>
+                <ul>
+                    <li><span class="bold-text">Hướng dẫn:</span> Yêu cầu người bệnh đứng bằng một chân, hai tay khoanh trước ngực.</li>
+                    <li><label for="oneLegStandTime">Thời gian giữ thăng bằng:</label> <input type="number" id="oneLegStandTime" name="oneLegStandTime" min="0" step="0.1" size="5"> giây (Đối với người cao tuổi, thời gian giữ được thường ngắn hơn, cần so sánh với chuẩn).</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>H. Thói Quen Sinh Hoạt & Sức Khỏe Tổng Thể Khác</h3>
+                <p class="section-purpose">Mục đích: Thu thập thông tin về lối sống và các vấn đề sức khỏe chưa được đề cập, giúp có cái nhìn toàn diện hơn.</p>
+
+                <div class="radio-group">
+                    <label>Bạn có thường xuyên tập thể dục/vận động không?</label>
+                    <label><input type="radio" name="exerciseFrequency" value="Hàng ngày (ít nhất 30 phút/ngày)"> Hàng ngày (ít nhất 30 phút/ngày)</label>
+                    <label><input type="radio" name="exerciseFrequency" value="3-5 lần/tuần"> 3-5 lần/tuần</label>
+                    <label><input type="radio" name="exerciseFrequency" value="1-2 lần/tuần"> 1-2 lần/tuần</label>
+                    <label><input type="radio" name="exerciseFrequency" value="Hầu như không vận động"> Hầu như không vận động</label>
+                    <p class="sub-question">(Nếu có, vui lòng mô tả loại hình và cường độ vận động):</p>
+                    <textarea name="exerciseDetails" placeholder="Mô tả loại hình và cường độ"></textarea>
+                </div>
+
+                <div class="radio-group">
+                    <label>Bạn có hút thuốc lá không?</label>
+                    <label><input type="radio" name="smoking" value="Có"> Có (Số điếu/ngày:)</label>
+                    <input type="text" name="cigarettesPerDay" placeholder="Số điếu/ngày" class="indent-options">
+                    <label><input type="radio" name="smoking" value="Đã bỏ"> Đã bỏ (Thời gian bỏ:)</label>
+                    <input type="text" name="quitSmokingTime" placeholder="Thời gian bỏ" class="indent-options">
+                    <label><input type="radio" name="smoking" value="Không bao giờ hút"> Không bao giờ hút</label>
+                </div>
+
+                <div class="radio-group">
+                    <label>Bạn có uống rượu bia không?</label>
+                    <label><input type="radio" name="alcohol" value="Hàng ngày"> Hàng ngày (Lượng:)</label>
+                    <input type="text" name="alcoholDailyAmount" placeholder="Lượng" class="indent-options">
+                    <label><input type="radio" name="alcohol" value="Vài lần/tuần"> Vài lần/tuần (Lượng:)</label>
+                    <input type="text" name="alcoholWeeklyAmount" placeholder="Lượng" class="indent-options">
+                    <label><input type="radio" name="alcohol" value="Thỉnh thoảng"> Thỉnh thoảng (Lượng:)</label>
+                    <input type="text" name="alcoholOccasionalAmount" placeholder="Lượng" class="indent-options">
+                    <label><input type="radio" name="alcohol" value="Không bao giờ"> Không bao giờ</label>
+                </div>
+
+                <div class="radio-group">
+                    <label>Bạn có thường xuyên cảm thấy khó ngủ, mất ngủ, hay thức giấc nhiều lần trong đêm không?</label>
+                    <label><input type="radio" name="sleepProblem" value="Có"> Có (Mức độ: Nhẹ / Vừa / Nặng. Vui lòng mô tả:)</label>
+                    <textarea name="sleepProblemDetails" placeholder="Mô tả chi tiết" class="indent-options"></textarea>
+                    <label><input type="radio" name="sleepProblem" value="Không"> Không</label>
+                </div>
+
+                <div class="radio-group">
+                    <label>Bạn có tham gia các hoạt động xã hội, câu lạc bộ, hội nhóm nào không? (Ví dụ: câu lạc bộ dưỡng sinh, nhóm đọc sách, tình nguyện...)</label>
+                    <label><input type="radio" name="socialActivities" value="Có"> Có (Vui lòng ghi rõ):</label>
+                    <textarea name="socialActivitiesDetails" placeholder="Ghi rõ hoạt động" class="indent-options"></textarea>
+                    <label><input type="radio" name="socialActivities" value="Không"> Không (Nếu không, có muốn tham gia không và gặp khó khăn gì?):</label>
+                    <textarea name="socialActivitiesNoDetails" placeholder="Mô tả lý do/khó khăn" class="indent-options"></textarea>
+                </div>
+
+                <div class="radio-group">
+                    <label>Bạn có bất kỳ triệu chứng khó chịu nào khác mà chưa được đề cập ở trên không? (Ví dụ: đau mạn tính, táo bón/tiêu chảy kéo dài, tiểu không tự chủ, tê bì chân tay...)</label>
+                    <label><input type="radio" name="otherSymptoms" value="Có"> Có (Vui lòng mô tả chi tiết):</label>
+                    <textarea name="otherSymptomsDetails" placeholder="Mô tả chi tiết triệu chứng" class="indent-options"></textarea>
+                    <label><input type="radio" name="otherSymptoms" value="Không"> Không</label>
+                </div>
+            </section>
+
+            <section>
+                <h3>I. Kết Luận Sàng Lọc Ban Đầu (Tổng Kết)</h3>
+                <p class="section-purpose">Mục đích: Tổng hợp các phát hiện ban đầu từ quá trình sàng lọc để chuyển giao cho Bác sĩ Lão khoa, tạo cơ sở cho các đề xuất khám chuyên sâu và kế hoạch chăm sóc cá nhân hóa.</p>
+
+                <div class="summary-section">
+                    <p><span class="bold-text">Tổng quan về tình trạng sức khỏe:</span> (Tổng hợp chung về tình trạng bệnh nhân)</p>
+                    <textarea id="overallSummary" name="overallSummary" rows="4" placeholder="Ví dụ: Bệnh nhân [Tên] 75 tuổi, có tiền sử tăng huyết áp 10 năm ổn định, tiểu đường mới phát hiện. Khả năng sinh hoạt độc lập một phần (cần hỗ trợ tắm rửa)." readonly></textarea>
+
+                    <div class="summary-item">
+                        <label for="summaryBasicInfo">1. Thông tin cơ bản & Xã hội (từ Mục A):</label>
+                        <textarea id="summaryBasicInfo" name="summaryBasicInfo" rows="2" placeholder="Ví dụ: Sống cùng con cái, đã kết hôn." readonly></textarea>
+                    </div>
+
+                    <div class="summary-item">
+                        <label for="summaryChronicDiseases">2. Vấn đề về Bệnh lý & Tiền sử y tế (từ Mục B):</label>
+                        <textarea id="summaryChronicDiseases" name="summaryChronicDiseases" rows="2" placeholder="Ví dụ: Tăng huyết áp (10 năm - ổn định), Tiểu đường (mới phát hiện). Tiền sử gia đình có tiểu đường. Đã tiêm vắc-xin Cúm năm [Năm]." readonly></textarea>
+                    </div>
+
+                    <div class="summary-item">
+                        <label for="summaryMedicationSense">3. Vấn đề Quản lý thuốc & Chức năng Giác quan (từ Mục C):</label>
+                        <textarea id="summaryMedicationSense" name="summaryMedicationSense" rows="2" placeholder="Ví dụ: Đang dùng 4 loại thuốc, đôi khi quên uống. Thị lực giảm, chưa khám mắt gần đây." readonly></textarea>
+                    </div>
+
+                    <div class="summary-item">
+                        <label for="summaryADLIADL">4. Khả năng Sinh hoạt Hàng ngày (ADLs/IADLs - từ Mục D):</label>
+                        <textarea id="summaryADLIADL" name="summaryADLIADL" rows="2" placeholder="Ví dụ: Độc lập trong ADLs cơ bản trừ tắm rửa (cần hỗ trợ). Độc lập trong IADLs trừ nấu ăn và quản lý tiền bạc." readonly></textarea>
+                    </div>
+
+                    <div class="summary-item">
+                        <label for="summaryNutrition">5. Tình trạng Dinh dưỡng (từ MNA-SF, Mục E):</label>
+                        <textarea id="summaryNutrition" name="summaryNutrition" rows="2" placeholder="Ví dụ: Nguy cơ suy dinh dưỡng (MNA-SF: 9 điểm). Cảm giác thèm ăn giảm nhẹ." readonly></textarea>
+                    </div>
+
+                    <div class="summary-item">
+                        <label for="summaryPsychoCognitive">6. Tình trạng Tâm lý & Nhận thức (từ GDS-SF, Mục F):</label>
+                        <textarea id="summaryPsychoCognitive" name="summaryPsychoCognitive" rows="2" placeholder="Ví dụ: Trầm cảm nhẹ (GDS-SF: 7 điểm). Cần đánh giá chi tiết hơn về nhận thức." readonly></textarea>
+                    </div>
+
+                    <div class="summary-item">
+                        <label for="summaryFallRisk">7. Nguy cơ Té ngã (từ Mục G):</label>
+                        <textarea id="summaryFallRisk" name="summaryFallRisk" rows="2" placeholder="Ví dụ: Đã té 1 lần trong 12 tháng qua (không chấn thương). TUG 15 giây (nguy cơ tăng). Sàn nhà trơn trượt." readonly></textarea>
+                    </div>
+
+                    <div class="summary-item">
+                        <label for="summaryLifestyle">8. Thói quen Sinh hoạt & Sức khỏe Tổng thể Khác (từ Mục H):</label>
+                        <textarea id="summaryLifestyle" name="summaryLifestyle" rows="2" placeholder="Ví dụ: Hầu như không vận động. Thường xuyên mất ngủ (mức độ vừa)." readonly></textarea>
+                    </div>
+                </div> <label for="screeningDate">Ngày sàng lọc:</label>
+                <input type="date" id="screeningDate" name="screeningDate" required>
+
+                <label for="interviewerName">Người thực hiện sàng lọc:</label>
+                <input type="text" id="interviewerName" name="interviewerName" required>
+
+                <label for="interviewerTitle">Chức danh:</label>
+                <input type="text" id="interviewerTitle" name="interviewerTitle" required>
+            </section>
+
+            <div class="note">
+                <p><span class="bold-text">Lưu ý:</span> Bộ câu hỏi chi tiết này là một công cụ thu thập thông tin và là một phần quan trọng của quy trình đánh giá lão khoa toàn diện tại trung tâm của bạn. Việc tuân thủ các hướng dẫn và sử dụng công cụ chuẩn hóa sẽ giúp bạn có cái nhìn sâu sắc và chính xác về tình trạng của mỗi người cao tuổi, từ đó cung cấp dữ liệu đầu vào cần thiết cho Bác sĩ Lão khoa để đưa ra các đề xuất khám chuyên sâu và kế hoạch chăm sóc cá nhân hóa.</p>
+            </div>
+
+            <div class="form-footer">
+                <button type="submit" style="padding: 15px 30px; font-size: 1.2rem; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">Gửi Kết Quả Sàng Lọc</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('screeningForm');
+
+            // --- Utility function to get checked radio value ---
+            function getCheckedRadioValue(name) {
+                const radio = form.querySelector(`input[name="${name}"]:checked`);
+                return radio ? radio.value : '';
+            }
+
+            // --- Calculation for MNA-SF and GDS-SF ---
+            function calculateMnaSf() {
+                let total = 0;
+                const questions = [
+                    'mna_q1', 'mna_q2', 'mna_q3', 'mna_q4', 'mna_q5', 'mna_q6'
+                ];
+                questions.forEach(qName => {
+                    const selected = form.querySelector(`input[name="${qName}"]:checked`);
+                    if (selected) {
+                        total += parseInt(selected.value);
+                    }
+                });
+                document.getElementById('mnaTotalScore').value = total;
+                updateSummaryNutrition(total); // Call summary update
+            }
+
+            function calculateGdsSf() {
+                let total = 0;
+                const questions = [
+                    'gds_q1', 'gds_q2', 'gds_q3', 'gds_q4', 'gds_q5', 'gds_q6', 'gds_q7', 'gds_q8',
+                    'gds_q9', 'gds_q10', 'gds_q11', 'gds_q12', 'gds_q13', 'gds_q14', 'gds_q15'
+                ];
+                questions.forEach(qName => {
+                    const selected = form.querySelector(`input[name="${qName}"]:checked`);
+                    if (selected) {
+                        total += parseInt(selected.value);
+                    }
+                });
+                document.getElementById('gdsTotalScore').value = total;
+                updateSummaryPsychoCognitive(total); // Call summary update
+            }
+
+            // --- Update Summary Functions for Each Section ---
+
+            function updateSummaryBasicInfo() {
+                const livingArrangement = getCheckedRadioValue('livingArrangement');
+                const livingArrangementOther = document.querySelector('textarea[name="livingArrangementOther"]')?.value.trim();
+                const maritalStatus = getCheckedRadioValue('maritalStatus');
+                const summary = [];
+
+                if (livingArrangement) {
+                    if (livingArrangement === "Khác" && livingArrangementOther) {
+                        summary.push(`Sống cùng: ${livingArrangementOther}.`);
+                    } else if (livingArrangement !== "Khác") {
+                        summary.push(`Sống cùng: ${livingArrangement}.`);
+                    }
+                }
+                if (maritalStatus) {
+                    summary.push(`Tình trạng hôn nhân: ${maritalStatus}.`);
+                }
+                document.getElementById('summaryBasicInfo').value = summary.join(' ');
+            }
+
+            function updateSummaryChronicDiseases() {
+                const selectedDiseases = Array.from(form.querySelectorAll('input[name="chronicDisease"]:checked'))
+                                            .map(cb => {
+                                                // Replace non-alphanumeric chars for name lookup, e.g., 'Uốn ván/Bạch hầu/Ho gà' -> 'UonvanBachhauHoga'
+                                                const detailsInputName = `details_${cb.value.replace(/[^a-zA-Z0-9]/g, '')}`;
+                                                const detailsInput = form.querySelector(`input[name="${detailsInputName}"]`) ||
+                                                                     form.querySelector(`textarea[name="${detailsInputName}"]`);
+                                                const details = detailsInput ? ` (${detailsInput.value.trim()})` : '';
+                                                return `${cb.value}${details}`;
+                                            });
+                const surgeryHospitalization = getCheckedRadioValue('surgeryHospitalization');
+                const surgeryHospitalizationDetails = document.querySelector('textarea[name="details_surgeryHospitalization"]')?.value.trim();
+                const familyHistory = Array.from(form.querySelectorAll('input[name="familyHistory"]:checked'))
+                                                .map(cb => {
+                                                    const detailsInput = document.querySelector(`textarea[name="details_khacTienSuGiaDinh"]`);
+                                                    return cb.value === 'Khác (tiền sử gia đình)' && detailsInput?.value.trim() ? `Khác (${detailsInput.value.trim()})` : cb.value;
+                                                });
+                const selectedVaccines = Array.from(form.querySelectorAll('input[name="vaccine"]:checked'))
+                                             .map(cb => {
+                                                const yearInputName = `year_${cb.value.replace(/[^a-zA-Z0-9]/g, '')}`;
+                                                const yearInput = form.querySelector(`input[name="${yearInputName}"]`);
+                                                const detailsInput = form.querySelector(`input[name="details_Khác_vắc-xin"]`); // Corrected name for 'details_khacVaccine'
+                                                let vaccineInfo = cb.value;
+                                                if (cb.value === 'Khác (vắc-xin)' && detailsInput?.value.trim()) {
+                                                    vaccineInfo = detailsInput.value.trim();
+                                                }
+                                                return `${vaccineInfo}${yearInput?.value.trim() ? ` (${yearInput.value.trim()})` : ''}`;
+                                            });
+
+                let summary = [];
+                if (selectedDiseases.length > 0) {
+                    summary.push(`Bệnh lý mãn tính: ${selectedDiseases.join(', ')}.`);
+                }
+                if (surgeryHospitalization === "Có" && surgeryHospitalizationDetails) {
+                    summary.push(`Từng phẫu thuật/nhập viện trong 12 tháng qua: ${surgeryHospitalizationDetails}.`);
+                } else if (surgeryHospitalization === "Không") {
+                    summary.push(`Không phẫu thuật/nhập viện trong 12 tháng qua.`);
+                }
+                if (familyHistory.length > 0) {
+                    summary.push(`Tiền sử gia đình: ${familyHistory.join(', ')}.`);
+                }
+                if (selectedVaccines.length > 0) {
+                    summary.push(`Đã tiêm vắc-xin: ${selectedVaccines.join(', ')}.`);
+                }
+                document.getElementById('summaryChronicDiseases').value = summary.join(' ');
+            }
+
+            function updateSummaryMedicationSense() {
+                const medicationCount = getCheckedRadioValue('medicationCount');
+                const medicationDifficulty = getCheckedRadioValue('medicationDifficulty');
+                const medicationDifficultyDetails = document.querySelector('textarea[name="details_medicationDifficulty"]')?.value.trim();
+                const vision = getCheckedRadioValue('visionImpairment');
+                const lastEyeExam = document.getElementById('lastEyeExam')?.value.trim();
+                const hearing = getCheckedRadioValue('hearingDifficulty');
+                const lastEarExam = document.getElementById('lastEarExam')?.value.trim();
+                const dental = getCheckedRadioValue('dentalProblem');
+                const lastDentalExam = document.getElementById('lastDentalExam')?.value.trim();
+
+                let summary = [];
+                if (medicationCount) {
+                    summary.push(`Sử dụng ${medicationCount} thuốc.`);
+                }
+                if (medicationDifficulty === "Có" && medicationDifficultyDetails) {
+                    summary.push(`Khó khăn quản lý thuốc: ${medicationDifficultyDetails}.`);
+                } else if (medicationDifficulty === "Không") {
+                    summary.push(`Không khó khăn quản lý thuốc.`);
+                }
+                if (vision) {
+                    let visionText = `Thị lực: ${vision}.`;
+                    if (vision !== "Đang sử dụng kính/kính áp tròng và đã điều chỉnh phù hợp" && lastEyeExam) {
+                        visionText += ` Khám gần nhất: ${lastEyeExam}.`;
+                    }
+                    summary.push(visionText);
+                }
+                if (hearing) {
+                    let hearingText = `Thính lực: ${hearing}.`;
+                     if (hearing !== "Đang sử dụng máy trợ thính" && lastEarExam) {
+                        hearingText += ` Khám gần nhất: ${lastEarExam}.`;
+                    }
+                    summary.push(hearingText);
+                }
+                if (dental) {
+                    let dentalText = `Răng miệng: ${dental}.`;
+                    if (dental !== "Đang sử dụng răng giả và cảm thấy thoải mái" && lastDentalExam) {
+                        dentalText += ` Khám gần nhất: ${lastDentalExam}.`;
+                    }
+                    summary.push(dentalText);
+                }
+                document.getElementById('summaryMedicationSense').value = summary.join(' ');
+            }
+
+            function updateSummaryADLIADL() {
+                const adlNames = {
+                    adl_1: "Tắm rửa", adl_2: "Mặc quần áo", adl_3: "Đi vệ sinh",
+                    adl_4: "Ăn uống", adl_5: "Di chuyển", adl_6: "Kiểm soát đại/tiểu tiện"
+                };
+                const iadlNames = {
+                    iadl_7: "Sử dụng điện thoại", iadl_8: "Mua sắm", iadl_9: "Nấu ăn",
+                    iadl_10: "Dọn dẹp nhà cửa", iadl_11: "Giặt giũ quần áo", iadl_12: "Quản lý tiền bạc",
+                    iadl_13: "Sử dụng phương tiện đi lại", iadl_14: "Uống thuốc đúng theo chỉ dẫn"
+                };
+
+                let adlSummary = [];
+                let allAdlIndependent = true;
+                for (const name in adlNames) {
+                    const selected = form.querySelector(`input[name="${name}"]:checked`);
+                    const note = form.querySelector(`input[name="note_${name}"]`)?.value.trim();
+                    if (selected && selected.value !== "Độc lập") {
+                        adlSummary.push(`${adlNames[name]}: ${selected.value}${note ? ` (${note})` : ''}`);
+                        allAdlIndependent = false;
+                    }
+                }
+
+                let iadlSummary = [];
+                let allIadlIndependent = true;
+                for (const name in iadlNames) {
+                    const selected = form.querySelector(`input[name="${name}"]:checked`);
+                    const note = form.querySelector(`input[name="note_${name}"]`)?.value.trim();
+                    if (selected && selected.value !== "Độc lập") {
+                        iadlSummary.push(`${iadlNames[name]}: ${selected.value}${note ? ` (${note})` : ''}`);
+                        allIadlIndependent = false;
+                    }
+                }
+
+                let summary = [];
+                if (allAdlIndependent) {
+                    summary.push(`ADLs cơ bản: Độc lập.`);
+                } else if (adlSummary.length > 0) {
+                    summary.push(`ADLs cần hỗ trợ: ${adlSummary.join(', ')}.`);
+                }
+
+                if (allIadlIndependent) {
+                    summary.push(`IADLs nâng cao: Độc lập.`);
+                } else if (iadlSummary.length > 0) {
+                    summary.push(`IADLs cần hỗ trợ: ${iadlSummary.join(', ')}.`);
+                }
+                document.getElementById('summaryADLIADL').value = summary.join(' ');
+            }
+
+            function updateSummaryNutrition(mnaScore) {
+                let assessmentText = '';
+                if (mnaScore >= 12 && mnaScore <= 14) {
+                    assessmentText = 'Tình trạng dinh dưỡng tốt.';
+                } else if (mnaScore >= 8 && mnaScore <= 11) {
+                    assessmentText = 'Nguy cơ suy dinh dưỡng (cần theo dõi và tư vấn dinh dưỡng).';
+                } else if (mnaScore >= 0 && mnaScore <= 7) {
+                    assessmentText = 'Suy dinh dưỡng (cần can thiệp dinh dưỡng chuyên sâu).';
+                }
+                document.getElementById('summaryNutrition').value = `MNA-SF: ${mnaScore} điểm. ${assessmentText}`;
+            }
+
+            function updateSummaryPsychoCognitive(gdsScore) {
+                let assessmentText = '';
+                if (gdsScore >= 0 && gdsScore <= 4) {
+                    assessmentText = 'Bình thường (ít hoặc không có trầm cảm).';
+                } else if (gdsScore >= 5 && gdsScore <= 8) {
+                    assessmentText = 'Trầm cảm nhẹ (cần theo dõi và tư vấn).';
+                } else if (gdsScore >= 9 && gdsScore <= 11) {
+                    assessmentText = 'Trầm cảm vừa (cần thăm khám chuyên khoa tâm thần).';
+                } else if (gdsScore >= 12 && gdsScore <= 15) {
+                    assessmentText = 'Trầm cảm nặng (cần can thiệp y tế khẩn cấp nếu có dấu hiệu nguy hiểm).';
+                }
+                document.getElementById('summaryPsychoCognitive').value = `GDS-SF: ${gdsScore} điểm. ${assessmentText}`;
+            }
+
+            function updateSummaryFallRisk() {
+                const fallCount = getCheckedRadioValue('fallCount');
+                const fallInjury = getCheckedRadioValue('fallInjury');
+                const balanceDizziness = getCheckedRadioValue('balanceDizziness');
+                const legWeakness = getCheckedRadioValue('legWeakness');
+                const assistiveDevice = getCheckedRadioValue('assistiveDevice');
+                const assistiveDeviceDetails = document.querySelector('input[name="details_assistiveDevice"]')?.value.trim();
+                const medicationEffectBalance = getCheckedRadioValue('medicationEffectBalance');
+                const environmentalFactors = Array.from(form.querySelectorAll('input[name="environmentalFactors"]:checked'))
+                                                 .filter(cb => cb.value !== 'Không có yếu tố nào')
+                                                 .map(cb => cb.value);
+                const tugTime = parseFloat(document.getElementById('tugTime')?.value);
+                const oneLegStandTime = parseFloat(document.getElementById('oneLegStandTime')?.value);
+
+
+                let summary = [];
+                if (fallCount) {
+                    summary.push(`Số lần té ngã trong 12 tháng: ${fallCount}.`);
+                }
+                if (fallInjury && fallCount !== '0 lần') {
+                    summary.push(`Té ngã gây chấn thương: ${fallInjury}.`);
+                }
+                if (balanceDizziness) {
+                    summary.push(`Mất thăng bằng/chóng mặt: ${balanceDizziness}.`);
+                }
+                if (legWeakness) {
+                    summary.push(`Yếu chân/đi lại không vững: ${legWeakness}.`);
+                }
+                if (assistiveDevice === "Có" && assistiveDeviceDetails) {
+                    summary.push(`Sử dụng dụng cụ hỗ trợ: ${assistiveDeviceDetails}.`);
+                } else if (assistiveDevice === "Không") {
+                     summary.push(`Không sử dụng dụng cụ hỗ trợ đi lại.`);
+                }
+                if (medicationEffectBalance) {
+                    summary.push(`Thuốc ảnh hưởng thăng bằng: ${medicationEffectBalance}.`);
+                }
+                if (environmentalFactors.length > 0) {
+                    summary.push(`Yếu tố môi trường nguy cơ té ngã: ${environmentalFactors.join(', ')}.`);
+                } else if (form.querySelector('input[name="environmentalFactors"][value="Không có yếu tố nào"]:checked')) {
+                    summary.push(`Môi trường sống không có yếu tố nguy cơ té ngã.`);
+                }
+
+                if (!isNaN(tugTime)) {
+                    let tugAssessment = '';
+                    if (tugTime <= 12) {
+                        tugAssessment = 'Nguy cơ té ngã thấp.';
+                    } else {
+                        tugAssessment = 'Nguy cơ té ngã tăng đáng kể (cần đánh giá thăng bằng và dáng đi chuyên sâu).';
+                    }
+                    summary.push(`TUG Test: ${tugTime} giây (${tugAssessment})`);
+                }
+                if (!isNaN(oneLegStandTime)) {
+                    summary.push(`One-Leg Stand Test: ${oneLegStandTime} giây.`);
+                }
+
+
+                document.getElementById('summaryFallRisk').value = summary.join(' ');
+            }
+
+            function updateSummaryLifestyle() {
+                const exerciseFrequency = getCheckedRadioValue('exerciseFrequency');
+                const exerciseDetails = document.querySelector('textarea[name="exerciseDetails"]')?.value.trim();
+                const smoking = getCheckedRadioValue('smoking');
+                const cigarettesPerDay = document.querySelector('input[name="cigarettesPerDay"]')?.value.trim();
+                const quitSmokingTime = document.querySelector('input[name="quitSmokingTime"]')?.value.trim();
+                const alcohol = getCheckedRadioValue('alcohol');
+                const alcoholDetails = document.querySelector('input[name="alcoholDailyAmount"]')?.value.trim() ||
+                                       document.querySelector('input[name="alcoholWeeklyAmount"]')?.value.trim() ||
+                                       document.querySelector('input[name="alcoholOccasionalAmount"]')?.value.trim();
+                const sleepProblem = getCheckedRadioValue('sleepProblem');
+                const sleepProblemDetails = document.querySelector('textarea[name="sleepProblemDetails"]')?.value.trim();
+                const socialActivities = getCheckedRadioValue('socialActivities');
+                const socialActivitiesDetails = document.querySelector('textarea[name="socialActivitiesDetails"]')?.value.trim();
+                const socialActivitiesNoDetails = document.querySelector('textarea[name="socialActivitiesNoDetails"]')?.value.trim();
+                const otherSymptoms = getCheckedRadioValue('otherSymptoms');
+                const otherSymptomsDetails = document.querySelector('textarea[name="otherSymptomsDetails"]')?.value.trim();
+
+                let summary = [];
+                if (exerciseFrequency) {
+                    let exerciseText = `Vận động: ${exerciseFrequency}.`;
+                    if (exerciseDetails) {
+                        exerciseText += ` Mô tả: ${exerciseDetails}.`;
+                    }
+                    summary.push(exerciseText);
+                }
+                if (smoking === "Có" && cigarettesPerDay) {
+                    summary.push(`Hút thuốc lá: ${cigarettesPerDay} điếu/ngày.`);
+                } else if (smoking === "Đã bỏ" && quitSmokingTime) {
+                    summary.push(`Đã bỏ thuốc lá: ${quitSmokingTime}.`);
+                } else if (smoking === "Không bao giờ hút") {
+                    summary.push(`Không hút thuốc lá.`);
+                }
+                if (alcohol) {
+                     let alcoholText = `Uống rượu bia: ${alcohol}.`;
+                     if (alcoholDetails) {
+                         alcoholText += ` Lượng: ${alcoholDetails}.`;
+                     }
+                     summary.push(alcoholText);
+                }
+                if (sleepProblem === "Có" && sleepProblemDetails) {
+                    summary.push(`Vấn đề giấc ngủ: ${sleepProblemDetails}.`);
+                } else if (sleepProblem === "Không") {
+                    summary.push(`Không có vấn đề giấc ngủ.`);
+                }
+                if (socialActivities === "Có" && socialActivitiesDetails) {
+                    summary.push(`Tham gia hoạt động xã hội: ${socialActivitiesDetails}.`);
+                } else if (socialActivities === "Không") {
+                    summary.push(`Không tham gia hoạt động xã hội.`);
+                    if (socialActivitiesNoDetails) {
+                        summary[summary.length - 1] += ` Lý do/khó khăn: ${socialActivitiesNoDetails}.`;
+                    }
+                }
+                if (otherSymptoms === "Có" && otherSymptomsDetails) {
+                    summary.push(`Triệu chứng khó chịu khác: ${otherSymptomsDetails}.`);
+                } else if (otherSymptoms === "Không") {
+                    summary.push(`Không có triệu chứng khó chịu khác.`);
+                }
+                document.getElementById('summaryLifestyle').value = summary.join(' ');
+            }
+
+
+            // --- Main Summary Update Function ---
+            function updateAllSummaries() {
+                updateSummaryBasicInfo();
+                updateSummaryChronicDiseases();
+                updateSummaryMedicationSense();
+                updateSummaryADLIADL();
+                // MNA-SF and GDS-SF calculations call their respective summary updates
+                calculateMnaSf();
+                calculateGdsSf();
+                updateSummaryFallRisk();
+                updateSummaryLifestyle();
+
+                // Overall summary based on patient's name and age and other section summaries
+                const fullName = document.getElementById('fullName')?.value.trim();
+                const age = document.getElementById('age')?.value.trim();
+                let overallText = `Tổng quan: `;
+                if (fullName && age) {
+                    overallText += `Bệnh nhân ${fullName}, ${age} tuổi. `;
+                } else if (fullName) {
+                     overallText += `Bệnh nhân ${fullName}. `;
+                } else if (age) {
+                    overallText += `${age} tuổi. `;
+                }
+
+                const allSummaries = [
+                    document.getElementById('summaryBasicInfo').value,
+                    document.getElementById('summaryChronicDiseases').value,
+                    document.getElementById('summaryMedicationSense').value,
+                    document.getElementById('summaryADLIADL').value,
+                    document.getElementById('summaryNutrition').value,
+                    document.getElementById('summaryPsychoCognitive').value,
+                    document.getElementById('summaryFallRisk').value,
+                    document.getElementById('summaryLifestyle').value
+                ].filter(s => s.trim() !== '').join('\n'); // Join with newline for readability
+
+                document.getElementById('overallSummary').value = overallText + '\n' + allSummaries;
+            }
+
+            // --- Event Listeners for All Inputs ---
+            // Listen for changes on the form to trigger summary updates
+            // Use 'change' for radio/checkbox/select and 'input' for text/textarea
+            form.addEventListener('change', updateAllSummaries); // Handles radio, checkbox, date, select
+            form.addEventListener('input', function(event) { // Handles text, textarea, number
+                const target = event.target;
+                if (target.tagName === 'INPUT' && (target.type === 'text' || target.type === 'number' || target.type === 'tel') || target.tagName === 'TEXTAREA') {
+                    updateAllSummaries();
+                }
+            });
+
+            // Initial update when page loads
+            updateAllSummaries();
+        });
+    </script>
+</body>
+</html>
