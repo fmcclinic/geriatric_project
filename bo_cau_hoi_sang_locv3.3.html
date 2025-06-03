@@ -266,7 +266,7 @@
             background-color: #dc3545;
             color: white;
         }
-        .api-key-saved-message {
+        #apiKeyStatusMessage {
             color: #28a745;
             font-weight: bold;
             margin-top: 5px;
@@ -1006,7 +1006,15 @@
                         <label for="summaryLifestyle">8. Thói quen Sinh hoạt & Sức khỏe Tổng thể Khác (từ Mục H):</label>
                         <textarea id="summaryLifestyle" name="summaryLifestyle" rows="2" placeholder="Ví dụ: Hầu như không vận động. Thường xuyên mất ngủ (mức độ vừa)." readonly></textarea>
                     </div>
-                </div> <div id="apiKeyInputSection">
+                </div> <div id="aiResponseSection">
+                    <label for="aiHtmlResponseContainer"><span class="bold-text">Gợi ý/Đánh giá từ AI (Gemini):</span></label>
+                    <div id="aiHtmlResponseContainer" style="min-height: 150px; border: 1px solid #ccc; padding: 10px; overflow-y: auto; background-color: #f8fcfd; border-radius: 4px;">
+                        <p style="color: #777;">Kết quả phân tích từ AI sẽ hiển thị tại đây sau khi bạn nhấn nút 'Gửi AI đánh giá'.</p>
+                    </div>
+                    <p id="aiErrorStatus" style="color: red;"></p>
+                </div>
+
+                <div id="apiKeyInputSection">
                     <label for="apiKeyInput">Nhập Gemini API Key (được lưu trên trình duyệt):</label>
                     <input type="password" id="apiKeyInput" placeholder="Nhập API Key của bạn">
                     <div id="apiKeyButtons">
@@ -1014,14 +1022,6 @@
                         <button type="button" id="clearApiKeyButton">Xóa Key</button>
                     </div>
                     <p id="apiKeyStatusMessage" class="api-key-saved-message">API Key chưa được lưu.</p>
-                </div>
-
-                <div id="aiResponseSection">
-                    <label for="aiHtmlResponseContainer"><span class="bold-text">Gợi ý/Đánh giá từ AI (Gemini):</span></label>
-                    <div id="aiHtmlResponseContainer" style="min-height: 150px; border: 1px solid #ccc; padding: 10px; overflow-y: auto; background-color: #f8fcfd; border-radius: 4px;">
-                        <p style="color: #777;">Kết quả phân tích từ AI sẽ hiển thị tại đây sau khi bạn nhấn nút 'Gửi AI đánh giá'.</p>
-                    </div>
-                    <p id="aiErrorStatus" style="color: red;"></p>
                 </div>
 
 
@@ -1059,18 +1059,47 @@
             const clearApiKeyButton = document.getElementById('clearApiKeyButton');
             const apiKeyStatusMessage = document.getElementById('apiKeyStatusMessage');
 
-            let geminiApiKey = 'AIzaSyDqmVAU-zkuRwQg0UbS9EeFcwGqPp8Kp_o'; // Stores API key in memory for current session after loading from localStorage
+            let geminiApiKey = ''; // Stores API key in memory for current session after loading from localStorage/api.txt
 
             // --- API Key Management Functions ---
-            function loadApiKey() {
-                const storedKey = localStorage.getItem('geminiApiKey');
-                if (storedKey) {
-                    geminiApiKey = storedKey;
-                    apiKeyInputSection.style.display = 'none'; // Hide input section
-                    apiKeyStatusMessage.textContent = 'API Key đã được lưu (chỉ hiển thị khi cần cập nhật/xóa).';
-                } else {
-                    apiKeyInputSection.style.display = 'block'; // Show input section
-                    apiKeyStatusMessage.textContent = 'API Key chưa được lưu.';
+            async function initializeApiKey() {
+                let keyFound = false;
+                
+                // Try to fetch from api.txt
+                try {
+                    const response = await fetch('api.txt');
+                    if (response.ok) {
+                        const fileContent = await response.text();
+                        const trimmedContent = fileContent.trim();
+                        if (trimmedContent) {
+                            geminiApiKey = trimmedContent;
+                            apiKeyInputSection.style.display = 'none';
+                            apiKeyStatusMessage.textContent = 'API Key đã được tải từ api.txt.';
+                            keyFound = true;
+                        }
+                    }
+                } catch (error) {
+                    console.warn('Không thể tải api.txt, thử kiểm tra localStorage:', error);
+                }
+
+                // If not found in api.txt, try localStorage
+                if (!keyFound) {
+                    const storedKey = localStorage.getItem('geminiApiKey');
+                    if (storedKey) {
+                        geminiApiKey = storedKey;
+                        apiKeyInputSection.style.display = 'none';
+                        apiKeyStatusMessage.textContent = 'API Key đã được lưu (từ trình duyệt).';
+                        keyFound = true;
+                    }
+                }
+
+                // If still not found, prompt user to enter
+                if (!keyFound) {
+                    apiKeyInputSection.style.display = 'block';
+                    apiKeyStatusMessage.textContent = 'API Key chưa được tìm thấy. Vui lòng nhập và lưu.';
+                    apiKeyInput.value = ''; // Ensure it's empty
+                    apiKeyInput.disabled = false;
+                    saveApiKeyButton.disabled = false;
                 }
             }
 
@@ -1532,13 +1561,10 @@
                             ]
                         }
                     ],
-                    // Removed generationConfig.responseMimeType as it's not supported for HTML
+                    // Removed generationConfig.responseMimeType as it's not supported for HTML directly
                 };
 
-                // --- CORRECTED API ENDPOINT ---
-                // Using gemini-1.5-flash which is generally available.
-                // You might need to check Google's latest documentation for the most current
-                // recommended model and API version for your specific region and usage.
+                // Using gemini-1.5-flash as it's a common and often available model.
                 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`;
 
 
@@ -1586,7 +1612,7 @@
             });
 
             // Initial setup and update when page loads
-            loadApiKey(); // Try to load API key from localStorage
+            initializeApiKey(); // Load API key from api.txt or localStorage
             fetchPrompt(); // Load prompt content
             updateAllSummaries();
         });
