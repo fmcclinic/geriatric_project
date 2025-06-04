@@ -262,13 +262,13 @@ th {
     background-color: #dc3545;
     color: white;
 }
-#apiKeyStatusMessage { /* Keep this selector as is */
+#apiKeyStatusMessage {
     color: #28a745; /* Default to green */
     font-weight: bold;
     margin-top: 5px;
     display: block; /* Ensure it takes its own line */
 }
-.api-key-not-saved-message { /* New class for "not saved" state */
+.api-key-not-saved-message {
      color: #dc3545; /* Red color for not saved */
 }
 .assessment-result {
@@ -281,8 +281,42 @@ th {
 .assessment-result p {
     margin: 5px 0;
 }
-/* Ensure radio/checkbox labels don't get too wide and push inputs off */
-.radio-group label span, .checkbox-group label span {
+.radio-group label span, .checkbox-group label span { /* Wrap text in span if needed for flex */
     flex-grow: 1;
     word-break: break-word;
+}
+
+/* === CSS cho tính năng đóng/mở Section === */
+.section-toggle {
+    cursor: pointer;
+    position: relative; /* Để định vị biểu tượng */
+    padding-left: 25px; /* Tạo không gian cho biểu tượng */
+    user-select: none; /* Ngăn chặn việc chọn văn bản khi nhấp đúp */
+    /* Các style khác của h3 vẫn được giữ nguyên */
+}
+
+.section-toggle::before {
+    content: '+'; /* Biểu tượng khi đóng */
+    position: absolute;
+    left: 5px; /* Điều chỉnh vị trí nếu cần */
+    top: 50%;
+    transform: translateY(-50%); /* Căn giữa theo chiều dọc */
+    font-size: 1.4em; /* Kích thước biểu tượng */
+    font-weight: bold;
+    line-height: 1; /* Đảm bảo không ảnh hưởng chiều cao của h3 */
+    color: #3498db; /* Màu biểu tượng */
+}
+
+.section-toggle.expanded::before {
+    content: '−'; /* Biểu tượng khi mở (dấu trừ Unicode) */
+}
+
+.section-content {
+    /* display: none;  Mặc định sẽ được đặt inline trong HTML hoặc bởi JS */
+    padding-left: 15px; /* Thụt lề cho nội dung bên trong */
+    border-left: 2px solid #ecf0f1; /* Đường kẻ nhẹ bên trái */
+    margin-left: 10px; /* Căn chỉnh với padding-left của .section-toggle */
+    margin-top: 15px; /* Khoảng cách với tiêu đề h3 */
+    margin-bottom: 20px; /* Khoảng cách với section tiếp theo */
+    overflow: hidden; /* Cần thiết nếu dùng transition cho max-height */
 }

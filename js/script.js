@@ -10,14 +10,63 @@ document.addEventListener('DOMContentLoaded', function() {
     const clearApiKeyButton = document.getElementById('clearApiKeyButton');
     const apiKeyStatusMessage = document.getElementById('apiKeyStatusMessage');
 
+    // --- Logic cho Collapsible Sections ---
+    const sectionToggles = document.querySelectorAll('.section-toggle');
+    sectionToggles.forEach(toggle => {
+        const content = toggle.nextElementSibling; // Đây là div.section-content
+
+        // Thiết lập ARIA attributes ban đầu và gán vai trò button
+        if (content && content.classList.contains('section-content')) {
+            // Kiểm tra trạng thái display ban đầu từ inline style trong HTML
+            const isInitiallyExpanded = content.style.display === 'block';
+            toggle.setAttribute('aria-expanded', String(isInitiallyExpanded));
+            if (isInitiallyExpanded) {
+                toggle.classList.add('expanded');
+            }
+            
+            toggle.setAttribute('role', 'button');
+            toggle.setAttribute('tabindex', '0'); // Cho phép focus bằng bàn phím
+
+            toggle.addEventListener('click', () => {
+                const isExpanded = content.style.display === 'block';
+                content.style.display = isExpanded ? 'none' : 'block';
+                toggle.classList.toggle('expanded', !isExpanded);
+                toggle.setAttribute('aria-expanded', String(!isExpanded));
+            });
+
+            toggle.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault(); // Ngăn hành động mặc định (ví dụ: cuộn trang khi nhấn Space)
+                    toggle.click(); // Kích hoạt sự kiện click đã định nghĩa ở trên
+                }
+            });
+        } else {
+            console.warn("Cấu trúc HTML không đúng cho section-toggle, không tìm thấy .section-content kế tiếp:", toggle);
+        }
+    });
+
+    // (Tùy chọn) Mở Section A mặc định nếu muốn (bỏ comment nếu dùng)
+    /*
+    const firstToggle = document.querySelector('section:first-of-type .section-toggle'); 
+    if (firstToggle) {
+        const firstContent = firstToggle.nextElementSibling;
+        if (firstContent && firstContent.classList.contains('section-content')) {
+            firstContent.style.display = 'block';
+            firstToggle.classList.add('expanded');
+            firstToggle.setAttribute('aria-expanded', 'true');
+        }
+    }
+    */
+    // --- Kết thúc Logic cho Collapsible Sections ---
+
+
     let geminiApiKey = '';
     let promptContent = '';
 
     async function initializeApiKey() {
         let keyFound = false;
         try {
-            // Giả sử api.txt cùng cấp với index.html
-            const response = await fetch('api.txt');
+            const response = await fetch('api.txt'); // Giả sử api.txt cùng cấp với index.html
             if (response.ok) {
                 const fileContent = await response.text();
                 const trimmedContent = fileContent.trim();
@@ -126,7 +175,8 @@ document.addEventListener('DOMContentLoaded', function() {
         let adlSummaryDetails = [];
         for (const name in adlNames) {
             const selected = form.querySelector(`input[name="${name}"]:checked`);
-            const note = form.querySelector(`input[name="note_${name}"]`)?.value.trim();
+            const noteInput = form.querySelector(`input[name="note_${name}"]`);
+            const note = noteInput ? noteInput.value.trim() : '';
             if (selected) {
                 if (selected.value === "Độc lập") {
                     adlIndependentCount++;
@@ -137,16 +187,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         let adlAssessmentText = `Tổng điểm ADLs: ${adlIndependentCount}/6. `;
-        if (adlIndependentCount === 6) {
+        let adlAnswered = false; // Kiểm tra xem có câu ADL nào được trả lời không
+        for (const name in adlNames) { if (form.querySelector(`input[name="${name}"]:checked`)) { adlAnswered = true; break; } }
+
+        if (!adlAnswered) {
+            adlAssessmentText += 'Chưa có thông tin đánh giá ADLs đầy đủ.';
+        } else if (adlIndependentCount === 6) {
             adlAssessmentText += 'Độc lập hoàn toàn trong các hoạt động sinh hoạt cơ bản.';
         } else if (adlIndependentCount >= 4) {
             adlAssessmentText += 'Độc lập phần lớn, cần hỗ trợ tối thiểu trong ADLs.';
         } else if (adlIndependentCount >= 2) {
             adlAssessmentText += 'Phụ thuộc mức độ trung bình trong ADLs.';
-        } else if (adlSummaryDetails.length > 0 || (form.querySelector(`input[name="adl_1"]:checked`) && adlIndependentCount < 2) ) {
+        } else { 
             adlAssessmentText += 'Phụ thuộc nhiều/hoàn toàn trong các hoạt động sinh hoạt cơ bản.';
-        } else {
-             adlAssessmentText += 'Chưa có thông tin đánh giá ADLs đầy đủ.';
         }
         if (adlSummaryDetails.length > 0) {
             adlAssessmentText += ` Các hoạt động cần hỗ trợ: ${adlSummaryDetails.join(', ')}.`;
@@ -156,7 +209,8 @@ document.addEventListener('DOMContentLoaded', function() {
         let iadlSummaryDetails = [];
         for (const name in iadlNames) {
             const selected = form.querySelector(`input[name="${name}"]:checked`);
-            const note = form.querySelector(`input[name="note_${name}"]`)?.value.trim();
+            const noteInput = form.querySelector(`input[name="note_${name}"]`);
+            const note = noteInput ? noteInput.value.trim() : '';
             if (selected) {
                 if (selected.value === "Độc lập") {
                     iadlIndependentCount++;
@@ -167,14 +221,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         let iadlAssessmentText = `Tổng điểm IADLs: ${iadlIndependentCount}/8. `;
-         if (iadlIndependentCount === 8) {
+        let iadlAnswered = false; // Kiểm tra xem có câu IADL nào được trả lời không
+        for (const name in iadlNames) { if (form.querySelector(`input[name="${name}"]:checked`)) { iadlAnswered = true; break; } }
+
+        if(!iadlAnswered){
+            iadlAssessmentText += 'Chưa có thông tin đánh giá IADLs đầy đủ.';
+        } else if (iadlIndependentCount === 8) {
             iadlAssessmentText += 'Độc lập hoàn toàn trong các hoạt động sinh hoạt nâng cao.';
         } else if (iadlIndependentCount >= 5) {
             iadlAssessmentText += 'Cần hỗ trợ một phần trong IADLs.';
-        } else if (iadlSummaryDetails.length > 0 || (form.querySelector(`input[name="iadl_7"]:checked`) && iadlIndependentCount < 5)) {
+        } else { 
             iadlAssessmentText += 'Phụ thuộc nhiều vào người chăm sóc trong IADLs.';
-        } else {
-             iadlAssessmentText += 'Chưa có thông tin đánh giá IADLs đầy đủ.';
         }
         if (iadlSummaryDetails.length > 0) {
             iadlAssessmentText += ` Các hoạt động cần hỗ trợ: ${iadlSummaryDetails.join(', ')}.`;
@@ -211,14 +268,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedDiseases = Array.from(form.querySelectorAll('input[name="chronicDisease"]:checked'))
             .map(cb => {
                 let details = '';
-                const nextElement = cb.parentNode.nextElementSibling;
-                // Kiểm tra xem nextElement có tồn tại và là input/textarea không
-                // và có phải là phần tử chi tiết liên quan không (ví dụ, không phải là một label khác)
-                if (nextElement && (nextElement.tagName === 'INPUT' || nextElement.tagName === 'TEXTAREA') && 
-                    (nextElement.name.startsWith('details_') || nextElement.name.startsWith('year_'))) {
-                    const detailsValue = nextElement.value.trim();
-                    if (detailsValue) {
-                        details = ` (${detailsValue})`;
+                // parentNode là label, nextElementSibling là input/textarea chi tiết
+                const nextElement = cb.parentNode.nextElementSibling; 
+                if (nextElement && (nextElement.tagName === 'INPUT' || nextElement.tagName === 'TEXTAREA')) {
+                     // Kiểm tra xem name có khớp với quy ước không, để tránh lấy nhầm phần tử
+                    if (nextElement.name.startsWith('details_')) {
+                        const detailsValue = nextElement.value.trim();
+                        if (detailsValue) {
+                            details = ` (${detailsValue})`;
+                        }
                     }
                 }
                 return `${cb.value}${details}`;
@@ -230,13 +288,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const familyHistory = Array.from(form.querySelectorAll('input[name="familyHistory"]:checked'))
             .map(cb => {
                 if (cb.value === 'Khác (tiền sử gia đình)') {
-                    // Phần tử tiếp theo của label chứa checkbox "Khác..." là textarea
                     const nextElement = cb.parentNode.nextElementSibling;
-                    if (nextElement && nextElement.tagName === 'TEXTAREA' && nextElement.name === 'details_Khác_tiền_sử_gia_đình') {
+                     if (nextElement && nextElement.tagName === 'TEXTAREA' && nextElement.name === 'details_Khác_tiền_sử_gia_đình') {
                          const detailsValue = nextElement.value.trim();
-                         return detailsValue ? `Khác (${detailsValue})` : cb.value;
+                         return detailsValue ? `Khác (${detailsValue})` : cb.value; // Trả về value gốc nếu details rỗng
                     }
-                    return cb.value;
+                    return cb.value; // Trả về value gốc nếu không tìm thấy textarea chi tiết
                 }
                 return cb.value;
             });
@@ -247,12 +304,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 let associatedDetail = '';
                 const nextElement = cb.parentNode.nextElementSibling;
                 if (nextElement && nextElement.tagName === 'INPUT' && nextElement.type === 'text') {
-                    const nextElementValue = nextElement.value.trim();
-                    if (nextElementValue) {
-                        if (cb.value === 'Khác (vắc-xin)') { // Input là tên vắc-xin khác
-                            vaccineName = nextElementValue;
-                        } else { // Input là năm tiêm
-                            associatedDetail = ` (${nextElementValue})`;
+                    // Kiểm tra name của nextElement để đảm bảo nó là input chi tiết cho vaccine này
+                     if (nextElement.name.startsWith('year_') || nextElement.name === 'details_Khác_vắc_xin') {
+                        const nextElementValue = nextElement.value.trim();
+                        if (nextElementValue) {
+                            if (cb.value === 'Khác (vắc-xin)') { 
+                                vaccineName = nextElementValue;
+                            } else { 
+                                associatedDetail = ` (${nextElementValue})`;
+                            }
                         }
                     }
                 }
@@ -290,21 +350,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         if (vision) {
             let visionText = `Thị lực: ${vision}.`;
-            if (lastEyeExam) { // Luôn thêm thông tin khám nếu có, bất kể lựa chọn nào
+            if (lastEyeExam) { 
                 visionText += ` Khám gần nhất: ${lastEyeExam}.`;
             }
             summary.push(visionText);
         }
         if (hearing) {
             let hearingText = `Thính lực: ${hearing}.`;
-            if (lastEarExam) { // Luôn thêm thông tin khám nếu có
+            if (lastEarExam) { 
                 hearingText += ` Khám gần nhất: ${lastEarExam}.`;
             }
             summary.push(hearingText);
         }
         if (dental) {
             let dentalText = `Răng miệng: ${dental}.`;
-            if (lastDentalExam) { // Luôn thêm thông tin khám nếu có
+            if (lastDentalExam) { 
                 dentalText += ` Khám gần nhất: ${lastDentalExam}.`;
             }
             summary.push(dentalText);
@@ -395,7 +455,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             summary.push(`TUG Test: ${tugTime} giây (${tugAssessment})`);
         } else {
-            // Nếu TUG không được nhập, đảm bảo không có li nào được highlight
              tugLis.forEach(li => { li.style.fontWeight = 'normal'; li.style.backgroundColor = 'transparent';});
         }
         if (!isNaN(oneLegStandTime)) summary.push(`One-Leg Stand Test: ${oneLegStandTime} giây.`);
@@ -467,11 +526,13 @@ document.addEventListener('DOMContentLoaded', function() {
         else if (age) overallTextIntro += `${age} tuổi. `;
 
         let adlIadlSummaryForOverall = '';
-        if (adlIadlResults && adlIadlResults.adl) { // Check if adlIadlResults and its properties are defined
+        if (adlIadlResults && adlIadlResults.adl) {
             if (adlIadlResults.adl.includes('Phụ thuộc') || adlIadlResults.adl.includes('Cần hỗ trợ một phần') || adlIadlResults.adl.includes('Cần hỗ trợ tối thiểu')) {
                 adlIadlSummaryForOverall += `Có sự phụ thuộc/cần hỗ trợ trong sinh hoạt hàng ngày (ADLs). `;
             } else if (adlIadlResults.adl.includes('Độc lập hoàn toàn')) {
                 adlIadlSummaryForOverall += `Độc lập tốt trong sinh hoạt cơ bản (ADLs). `;
+            } else if (adlIadlResults.adl.includes('Chưa có thông tin')) {
+                // Không thêm gì nếu chưa có thông tin
             }
         }
         if (adlIadlResults && adlIadlResults.iadl) {
@@ -479,6 +540,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 adlIadlSummaryForOverall += `Cần hỗ trợ trong các hoạt động sinh hoạt nâng cao (IADLs).`;
             } else if (adlIadlResults.iadl.includes('Độc lập hoàn toàn')) {
                 adlIadlSummaryForOverall += `Độc lập tốt trong sinh hoạt nâng cao (IADLs).`;
+            } else if (adlIadlResults.iadl.includes('Chưa có thông tin')) {
+                 // Không thêm gì nếu chưa có thông tin
             }
         }
         
@@ -500,8 +563,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function fetchPrompt() {
         try {
-            // Giả sử prompt.txt cùng cấp với index.html
-            const response = await fetch('prompt.txt');
+            const response = await fetch('prompt.txt'); // Giả sử prompt.txt cùng cấp với index.html
             if (!response.ok) throw new Error(`Could not fetch prompt.txt: ${response.statusText}`);
             promptContent = await response.text();
             console.log('Prompt.txt loaded successfully.');
@@ -546,6 +608,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 aiHtmlResponseContainer.innerHTML = '<p style="color: #777;">Không có phản hồi từ AI hoặc phản hồi không hợp lệ.</p>';
                  if (data.promptFeedback && data.promptFeedback.blockReason) {
                     aiErrorStatus.textContent = `Phản hồi bị chặn: ${data.promptFeedback.blockReason}. Chi tiết: ${data.promptFeedback.blockReasonMessage || ''}`;
+                } else if (data.error) { // Thêm kiểm tra lỗi từ chính API response
+                    aiErrorStatus.textContent = `Lỗi từ API: ${data.error.message}`;
                 }
             }
         } catch (error) {
@@ -558,24 +622,37 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    form.addEventListener('change', updateAllSummaries);
-    form.addEventListener('input', function(event) {
+    // --- Event Listeners for All Inputs to trigger summary updates ---
+    // Debounce function
+    function debounce(func, delay) {
+        let timeout;
+        return function(...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), delay);
+        };
+    }
+
+    const debouncedUpdateAllSummaries = debounce(updateAllSummaries, 400); // 400ms delay
+
+    form.addEventListener('change', function(event) {
         const target = event.target;
-        // Chỉ gọi updateAllSummaries nếu là các trường input text, number, tel hoặc textarea
-        // để tránh gọi nhiều lần không cần thiết khi chỉ focus/blur
-        if ( (target.tagName === 'INPUT' && (target.type === 'text' || target.type === 'number' || target.type === 'tel')) || 
-             target.tagName === 'TEXTAREA' || 
-             target.type === 'date' ) { // Thêm date vào đây nếu muốn update ngay khi chọn ngày
-            updateAllSummaries();
+        // 'change' is good for radio, checkbox, select, date
+        if (target.type === 'radio' || target.type === 'checkbox' || target.tagName === 'SELECT' || target.type === 'date') {
+            updateAllSummaries(); // Cập nhật ngay lập tức cho các lựa chọn này
         }
     });
-    // Xử lý riêng cho radio và checkbox vì 'input' event có thể không như ý muốn
-    form.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(input => {
-        input.addEventListener('change', updateAllSummaries);
+
+    form.addEventListener('input', function(event) {
+        const target = event.target;
+        // 'input' is good for text, textarea, number after debouncing
+        if ( (target.tagName === 'INPUT' && (target.type === 'text' || target.type === 'number' || target.type === 'tel')) || 
+             target.tagName === 'TEXTAREA' ) {
+            debouncedUpdateAllSummaries(); // Sử dụng debounce cho các trường gõ chữ
+        }
     });
-
-
+    
+    // Initial setup
     initializeApiKey();
     fetchPrompt();
-    updateAllSummaries();
+    updateAllSummaries(); // Initial call to populate summaries and set initial ARIA states for collapsible sections.
 });
