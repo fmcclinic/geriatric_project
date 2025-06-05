@@ -46,7 +46,6 @@ document.addEventListener('DOMContentLoaded', function() {
         form.querySelectorAll('input, textarea, select').forEach(element => {
             if (element.name) {
                 if (element.type === 'checkbox') {
-                    // Để xử lý nhiều checkbox cùng tên, ta cần key duy nhất hơn
                     formData[element.id || (element.name + `_val_${element.value}`)] = element.checked;
                 } else if (element.type === 'radio') {
                     if (element.checked) {
@@ -75,18 +74,24 @@ document.addEventListener('DOMContentLoaded', function() {
                                 if (element.type === 'checkbox') {
                                     element.checked = formData[fieldKey];
                                 } else if (element.type === 'radio') {
-                                    if (element.value === formData[fieldKey]) {
+                                    // Cần đảm bảo chỉ radio đúng value mới được check
+                                    if (formData.hasOwnProperty(element.name) && element.value === formData[element.name]) {
                                         element.checked = true;
+                                    } else {
+                                        element.checked = false; // Bỏ check các radio khác trong cùng group
                                     }
                                 } else {
                                     element.value = formData[fieldKey];
                                 }
+                            } else if (element.type === 'radio' && formData.hasOwnProperty(element.name) === false) {
+                                // Nếu key của radio group không có trong formData (ví dụ chưa chọn gì lúc lưu)
+                                // thì đảm bảo tất cả radio trong group đó không được check
+                                element.checked = false;
                             }
                         }
                     });
                     console.log('Form data loaded from localStorage.');
                     updateAllSummaries(); 
-                    // Kích hoạt sự kiện để các phần khác của UI (nếu có) cập nhật
                     Array.from(form.elements).forEach(el => {
                         const inputEvent = new Event('input', { bubbles: true, cancelable: true });
                         const changeEvent = new Event('change', { bubbles: true, cancelable: true });
@@ -96,18 +101,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } catch (e) {
                 console.error("Error parsing saved form data:", e);
-                localStorage.removeItem(LOCAL_STORAGE_KEY); // Xóa dữ liệu hỏng
+                localStorage.removeItem(LOCAL_STORAGE_KEY);
             }
         }
     }
-    // window.clearSavedFormData = function() { // Có thể tạo nút bấm hoặc gọi từ console
-    //     if (confirm('Bạn có chắc chắn muốn xóa dữ liệu biểu mẫu đã lưu không?')) {
-    //         localStorage.removeItem(LOCAL_STORAGE_KEY);
-    //         alert('Dữ liệu đã lưu đã được xóa.');
-    //         form.reset(); 
-    //         updateAllSummaries(); 
-    //     }
-    // };
     // --- Kết thúc Logic Lưu/Khôi phục Form ---
 
     // --- Logic Tính BMI ---
@@ -128,8 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             bmiResultSpan.textContent = '-';
         }
-        // BMI thay đổi cũng cần cập nhật lại MNA và các summary
-        updateAllSummaries(); // Hoặc chỉ calculateMnaSf() nếu muốn tối ưu hơn
+        updateAllSummaries();
     }
 
     if (heightInput) heightInput.addEventListener('input', calculateAndDisplayBmi);
@@ -265,13 +261,24 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateSummaryBasicInfo() {
-        const fields = ['fullName', 'age', 'dob', 'phoneNumber', 'address', 'emergencyName', 'emergencyPhone', 'occupation'];
+        const fieldsToInclude = {
+            'fullName': 'Họ và tên',
+            'age': 'Tuổi',
+            'dob': 'Ngày sinh',
+            'phoneNumber': 'Số điện thoại',
+            'address': 'Địa chỉ hiện tại',
+            'emergencyName': 'Người liên hệ khẩn cấp - Tên',
+            'emergencyPhone': 'Người liên hệ khẩn cấp - SĐT',
+            'occupation': 'Nghề nghiệp'
+        };
         let summaryParts = [];
 
-        const fullName = document.getElementById('fullName')?.value.trim();
-        const age = document.getElementById('age')?.value.trim();
-        if (fullName) summaryParts.push(`Họ và tên: ${fullName}.`);
-        if (age) summaryParts.push(`Tuổi: ${age}.`);
+        for (const id in fieldsToInclude) {
+            const element = document.getElementById(id);
+            if (element && element.value.trim()) {
+                summaryParts.push(`${fieldsToInclude[id]}: ${element.value.trim()}.`);
+            }
+        }
         
         const gender = getCheckedRadioValue('gender');
         if (gender) summaryParts.push(`Giới tính: ${gender}.`);
@@ -297,13 +304,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (livingArrangement === 'Khác' && livingArrangementOther) livingText += ` (${livingArrangementOther})`;
             summaryParts.push(livingText + '.');
         }
-        fields.forEach(fieldName => {
-            const element = document.getElementById(fieldName);
-            if (element && element.value.trim() && !['fullName', 'age'].includes(fieldName)) { // fullName, age đã xử lý
-                 const label = document.querySelector(`label[for="${fieldName}"]`);
-                 summaryParts.push(`${label ? label.textContent : fieldName}: ${element.value.trim()}.`);
-            }
-        });
+        
         const summaryBasicInfoEl = document.getElementById('summaryBasicInfo');
         if(summaryBasicInfoEl) summaryBasicInfoEl.value = summaryParts.join(' ');
     }
@@ -353,8 +354,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         let summary = [];
         if (selectedDiseases.length > 0) summary.push(`Bệnh lý mãn tính: ${selectedDiseases.join(', ')}.`);
-        if (surgeryHospitalization === "Có" && surgeryHospitalizationDetails) summary.push(`Từng phẫu thuật/nhập viện trong 12 tháng qua: ${surgeryHospitalizationDetails}.`);
-        else if (surgeryHospitalization === "Không") summary.push(`Không phẫu thuật/nhập viện trong 12 tháng qua.`);
+        if (surgeryHospitalization === "Có") {
+            summary.push(`Từng phẫu thuật/nhập viện trong 12 tháng qua: ${surgeryHospitalizationDetails || 'Có, không rõ chi tiết'}.`);
+        } else if (surgeryHospitalization === "Không") {
+            summary.push(`Không phẫu thuật/nhập viện trong 12 tháng qua.`);
+        }
         if (familyHistory.length > 0) summary.push(`Tiền sử gia đình: ${familyHistory.join(', ')}.`);
         if (selectedVaccines.length > 0) summary.push(`Đã tiêm vắc-xin: ${selectedVaccines.join(', ')}.`);
         
@@ -362,38 +366,89 @@ document.addEventListener('DOMContentLoaded', function() {
         if(summaryChronicDiseasesEl) summaryChronicDiseasesEl.value = summary.join(' ');
     }
 
+    // *** PHẦN ĐƯỢC CẬP NHẬT ĐỂ HIỂN THỊ TÓM TẮT GIÁC QUAN RÕ RÀNG HƠN ***
     function updateSummaryMedicationSense() {
         const medicationCount = getCheckedRadioValue('medicationCount');
         const medicationDifficulty = getCheckedRadioValue('medicationDifficulty');
         const medicationDifficultyDetails = document.querySelector('textarea[name="details_medicationDifficulty"]')?.value.trim();
-        const vision = getCheckedRadioValue('visionImpairment');
+        
+        const visionValue = getCheckedRadioValue('visionImpairment');
         const lastEyeExam = document.getElementById('lastEyeExam')?.value.trim();
-        const hearing = getCheckedRadioValue('hearingDifficulty');
+        
+        const hearingValue = getCheckedRadioValue('hearingDifficulty');
         const lastEarExam = document.getElementById('lastEarExam')?.value.trim();
-        const dental = getCheckedRadioValue('dentalProblem');
+        
+        const dentalValue = getCheckedRadioValue('dentalProblem');
         const lastDentalExam = document.getElementById('lastDentalExam')?.value.trim();
+
         let summary = [];
-        if (medicationCount) summary.push(`Sử dụng ${medicationCount} thuốc.`);
-        if (medicationDifficulty === "Có" && medicationDifficultyDetails) summary.push(`Khó khăn quản lý thuốc: ${medicationDifficultyDetails}.`);
-        else if (medicationDifficulty === "Không") summary.push(`Không khó khăn quản lý thuốc.`);
-        if (vision) {
-            let visionText = `Thị lực: ${vision}.`;
-            if (lastEyeExam) visionText += ` Khám gần nhất: ${lastEyeExam}.`;
+        if (medicationCount) {
+            summary.push(`Sử dụng ${medicationCount} thuốc.`);
+        }
+        if (medicationDifficulty === "Có") {
+            summary.push(`Khó khăn quản lý thuốc: ${medicationDifficultyDetails || 'Có, không rõ chi tiết'}.`);
+        } else if (medicationDifficulty === "Không") {
+            summary.push(`Không khó khăn quản lý thuốc.`);
+        }
+
+        // Vision Summary
+        if (visionValue) {
+            let visionText = '';
+            if (visionValue === "Có") {
+                visionText = "Thị lực: Có dấu hiệu suy giảm/vấn đề.";
+            } else if (visionValue === "Không") {
+                visionText = "Thị lực: Không có dấu hiệu suy giảm/vấn đề được báo cáo.";
+            } else { // "Đang sử dụng kính/kính áp tròng và đã điều chỉnh phù hợp"
+                visionText = `Thị lực: ${visionValue}.`;
+            }
+            if (lastEyeExam) {
+                visionText += ` Lần khám mắt gần nhất: ${lastEyeExam}.`;
+            } else if (visionValue === "Có" || visionValue === "Không") {
+                 visionText += " Không rõ thông tin lần khám mắt gần nhất.";
+            }
             summary.push(visionText);
         }
-        if (hearing) {
-            let hearingText = `Thính lực: ${hearing}.`;
-            if (lastEarExam) hearingText += ` Khám gần nhất: ${lastEarExam}.`;
+
+        // Hearing Summary
+        if (hearingValue) {
+            let hearingText = '';
+            if (hearingValue === "Có") {
+                hearingText = "Thính lực: Có khó khăn khi nghe/vấn đề.";
+            } else if (hearingValue === "Không") {
+                hearingText = "Thính lực: Không có khó khăn khi nghe/vấn đề được báo cáo.";
+            } else { // "Đang sử dụng máy trợ thính"
+                hearingText = `Thính lực: ${hearingValue}.`;
+            }
+            if (lastEarExam) {
+                hearingText += ` Lần khám tai gần nhất: ${lastEarExam}.`;
+            } else if (hearingValue === "Có" || hearingValue === "Không") {
+                hearingText += " Không rõ thông tin lần khám tai gần nhất.";
+            }
             summary.push(hearingText);
         }
-        if (dental) {
-            let dentalText = `Răng miệng: ${dental}.`;
-            if (lastDentalExam) dentalText += ` Khám gần nhất: ${lastDentalExam}.`;
+
+        // Dental Summary
+        if (dentalValue) {
+            let dentalText = '';
+            if (dentalValue === "Có") {
+                dentalText = "Răng miệng: Có vấn đề.";
+            } else if (dentalValue === "Không") {
+                dentalText = "Răng miệng: Không có vấn đề được báo cáo.";
+            } else { // "Đang sử dụng răng giả và cảm thấy thoải mái"
+                dentalText = `Răng miệng: ${dentalValue}.`;
+            }
+            if (lastDentalExam) {
+                dentalText += ` Lần khám nha khoa gần nhất: ${lastDentalExam}.`;
+            } else if (dentalValue === "Có" || dentalValue === "Không") {
+                dentalText += " Không rõ thông tin lần khám nha khoa gần nhất.";
+            }
             summary.push(dentalText);
         }
+
         const summaryMedicationSenseEl = document.getElementById('summaryMedicationSense');
         if(summaryMedicationSenseEl) summaryMedicationSenseEl.value = summary.join(' ');
     }
+    // *** KẾT THÚC PHẦN CẬP NHẬT ***
 
     function updateSummaryNutrition(mnaScore) {
         let assessmentText = '';
@@ -458,8 +513,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (fallInjury && fallCount !== '0 lần' && fallInjury !== 'Không áp dụng') summary.push(`Té ngã gây chấn thương: ${fallInjury}.`);
         if (balanceDizziness) summary.push(`Mất thăng bằng/chóng mặt: ${balanceDizziness}.`);
         if (legWeakness) summary.push(`Yếu chân/đi lại không vững: ${legWeakness}.`);
-        if (assistiveDevice === "Có" && assistiveDeviceDetails) summary.push(`Sử dụng dụng cụ hỗ trợ: ${assistiveDeviceDetails}.`);
-        else if (assistiveDevice === "Không") summary.push(`Không sử dụng dụng cụ hỗ trợ đi lại.`);
+        if (assistiveDevice === "Có") {
+            summary.push(`Sử dụng dụng cụ hỗ trợ: ${assistiveDeviceDetails || 'Có, không rõ loại'}.`);
+        } else if (assistiveDevice === "Không") {
+             summary.push(`Không sử dụng dụng cụ hỗ trợ đi lại.`);
+        }
         if (medicationEffectBalance) summary.push(`Thuốc ảnh hưởng thăng bằng: ${medicationEffectBalance}.`);
         if (environmentalFactors.length > 0) summary.push(`Yếu tố môi trường nguy cơ té ngã: ${environmentalFactors.join(', ')}.`);
         else if (form.querySelector('input[name="environmentalFactors"][value="Không có yếu tố nào"]:checked')) summary.push(`Môi trường sống không có yếu tố nguy cơ té ngã.`);
@@ -510,37 +568,48 @@ document.addEventListener('DOMContentLoaded', function() {
             if (exerciseDetails && exerciseFrequency !== "Hầu như không vận động") exerciseText += ` Mô tả: ${exerciseDetails}.`;
             summary.push(exerciseText);
         }
-        if (smoking === "Có" && cigarettesPerDay) summary.push(`Hút thuốc lá: ${cigarettesPerDay} điếu/ngày.`);
-        else if (smoking === "Đã bỏ" && quitSmokingTime) summary.push(`Đã bỏ thuốc lá: ${quitSmokingTime}.`);
-        else if (smoking === "Không bao giờ hút") summary.push(`Không hút thuốc lá.`);
+        if (smoking === "Có") {
+            summary.push(`Hút thuốc lá: Có${cigarettesPerDay ? ` (${cigarettesPerDay} điếu/ngày)` : ''}.`);
+        } else if (smoking === "Đã bỏ") {
+            summary.push(`Đã bỏ thuốc lá${quitSmokingTime ? ` (Thời gian: ${quitSmokingTime})` : ''}.`);
+        } else if (smoking === "Không bao giờ hút") {
+            summary.push(`Không hút thuốc lá.`);
+        }
         if (alcohol) {
             let alcoholText = `Uống rượu bia: ${alcohol}.`;
             if (alcoholDetails && alcohol !== "Không bao giờ") alcoholText += ` Lượng: ${alcoholDetails}.`;
             summary.push(alcoholText);
         }
-        if (sleepProblem === "Có" && sleepProblemDetails) summary.push(`Vấn đề giấc ngủ: ${sleepProblemDetails}.`);
-        else if (sleepProblem === "Không") summary.push(`Không có vấn đề giấc ngủ.`);
-        if (socialActivities === "Có" && socialActivitiesDetails) summary.push(`Tham gia hoạt động xã hội: ${socialActivitiesDetails}.`);
-        else if (socialActivities === "Không") {
+        if (sleepProblem === "Có") {
+            summary.push(`Vấn đề giấc ngủ: ${sleepProblemDetails || 'Có, không rõ chi tiết'}.`);
+        } else if (sleepProblem === "Không") {
+            summary.push(`Không có vấn đề giấc ngủ.`);
+        }
+        if (socialActivities === "Có") {
+            summary.push(`Tham gia hoạt động xã hội: ${socialActivitiesDetails || 'Có, không rõ chi tiết'}.`);
+        } else if (socialActivities === "Không") {
             let noSocialText = `Không tham gia hoạt động xã hội.`;
             if (socialActivitiesNoDetails) noSocialText += ` Lý do/khó khăn: ${socialActivitiesNoDetails}.`;
             summary.push(noSocialText);
         }
-        if (otherSymptoms === "Có" && otherSymptomsDetails) summary.push(`Triệu chứng khó chịu khác: ${otherSymptomsDetails}.`);
-        else if (otherSymptoms === "Không") summary.push(`Không có triệu chứng khó chịu khác.`);
+        if (otherSymptoms === "Có") {
+            summary.push(`Triệu chứng khó chịu khác: ${otherSymptomsDetails || 'Có, không rõ chi tiết'}.`);
+        } else if (otherSymptoms === "Không") {
+            summary.push(`Không có triệu chứng khó chịu khác.`);
+        }
         
         const summaryLifestyleEl = document.getElementById('summaryLifestyle');
         if(summaryLifestyleEl) summaryLifestyleEl.value = summary.join(' ');
     }
 
     function updateAllSummaries() {
-        if (!form) return; // Guard clause if form is not found
+        if (!form) return;
         updateSummaryBasicInfo();
         updateSummaryChronicDiseases();
         updateSummaryMedicationSense();
         const adlIadlResults = evaluateAndDisplayAdlIadl();
-        calculateMnaSf(); // This will internally call updateSummaryNutrition
-        calculateGdsSf(); // This will internally call updateSummaryPsychoCognitive
+        calculateMnaSf();
+        calculateGdsSf();
         updateSummaryFallRisk();
         updateSummaryLifestyle();
 
@@ -591,7 +660,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const target = event.target;
         if (target.type === 'radio' || target.type === 'checkbox' || target.tagName === 'SELECT' || target.type === 'date') {
             updateAllSummaries();
-            saveFormDataToLocalStorage(); // Lưu ngay lập tức cho các lựa chọn này
+            saveFormDataToLocalStorage();
         }
     });
 
@@ -600,15 +669,15 @@ document.addEventListener('DOMContentLoaded', function() {
         if ( (target.tagName === 'INPUT' && (target.type === 'text' || target.type === 'number' || target.type === 'tel')) || 
              target.tagName === 'TEXTAREA' ) {
             debouncedUpdateAllSummaries();
-            debouncedSaveFormData(); // Lưu sau khi gõ xong
+            debouncedSaveFormData();
         }
     });
     // --- Kết thúc Event Listeners ---
 
     // Initial setup calls
-    loadFormDataFromLocalStorage(); // Thử khôi phục trước, nó sẽ gọi updateAllSummaries nếu thành công
-    if (!localStorage.getItem(LOCAL_STORAGE_KEY)) { // Nếu không có gì để khôi phục, gọi update ban đầu
-        calculateAndDisplayBmi(); // Tính BMI nếu có giá trị sẵn
+    loadFormDataFromLocalStorage(); 
+    if (!localStorage.getItem(LOCAL_STORAGE_KEY)) {
+        calculateAndDisplayBmi(); 
         updateAllSummaries();
     }
 });
