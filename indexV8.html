@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công cụ Đánh giá và Hỗ trợ Quyết định Điều trị Rung Nhĩ Cơn (Paroxysmal AF)</title>
+    
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <style>
+        /* CSS - Phần định dạng giao diện */
+        :root {
+            --primary-color: #005a9c;
+            --secondary-color: #004070;
+            --border-color: #ccc;
+            --light-bg: #f4f7f9;
+            --highlight-bg: #eef2f7;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 1000px; /* Tăng chiều rộng để vừa bảng mới */
+            background-color: var(--light-bg);
+            color: #333;
+        }
+        h1, h2, h3, h4 {
+            color: var(--primary-color);
+        }
+        h1 { font-size: 1.8em; border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; }
+        h2 { font-size: 1.5em; margin-top: 40px; border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; }
+        h3 { font-size: 1.2em; margin-top: 25px; border-bottom: 1px solid var(--border-color); }
+        h4 { font-size: 1.1em; margin-top: 20px; color: var(--secondary-color); }
+
+        .container {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .info-box {
+            background-color: #e7f3fe;
+            border-left: 6px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .audio-player-container {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+        }
+        .audio-player-container h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        audio {
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        .shared-decision-module {
+            background-color: var(--highlight-bg);
+            border: 1px solid #c8d7e6;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+        
+        .decision-point {
+            background-color: #fffbe6;
+            border: 1px dashed #ffc107;
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 4px;
+        }
+        .decision-point label {
+            font-weight: bold;
+            color: #856404;
+        }
+
+        .recommendation {
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1.1em;
+            display: none;
+        }
+        .class-i { background-color: #d4edda; color: #155724; border-left: 5px solid #28a745; display: block;}
+        .class-iia { background-color: #fff3cd; color: #856404; border-left: 5px solid #ffc107; display: block;}
+        .class-iib { background-color: #ffeeba; color: #856404; border-left: 5px solid #ffc107; display: block;}
+        .class-iii { background-color: #f8d7da; color: #721c24; border-left: 5px solid #dc3545; display: block;}
+        .info { background-color: #e2e3e5; color: #383d41; border-left: 5px solid #6c757d; display: block;}
+
+
+        .score-display {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        details {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        summary {
+            font-weight: bold;
+            padding: 12px;
+            background-color: #f7f7f7;
+            cursor: pointer;
+            list-style: none;
+        }
+        summary::-webkit-details-marker { display: none; }
+        summary::before {
+            content: '►';
+            margin-right: 8px;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+        details[open] > summary::before {
+            transform: rotate(90deg);
+        }
+
+        .details-content {
+            padding: 15px;
+        }
+        .details-content ul {
+             padding-left: 20px;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 1fr 1fr;
+            gap: 1px;
+            background-color: #ddd;
+            border: 1px solid #ddd;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        .grid-header, .grid-label, .grid-cell {
+            background-color: #fff;
+            padding: 8px;
+        }
+        .grid-header {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            text-align: center;
+        }
+        .grid-label {
+            background-color: #f9f9f9;
+            font-weight: bold;
+        }
+        .grid-cell ul {
+            margin: 0;
+            padding-left: 18px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input[type="text"], input[type="number"], select {
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            width: auto;
+            min-width: 120px;
+        }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: flex; align-items: center; }
+        .form-group input[type="checkbox"], .form-group input[type="radio"] { margin-right: 10px; transform: scale(1.1); }
+
+        .summary-section {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            margin-top: 30px;
+            display: none;
+        }
+        .summary-section pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 1em;
+            background: #fff;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .secondary-button {
+             background-color: #6c757d;
+             font-size: 0.9em;
+             padding: 8px 15px;
+             margin-top: 15px;
+        }
+        .secondary-button:hover {
+            background-color: #5a6268;
+        }
+
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 1100px;
+            border-radius: 8px;
+            position: relative;
+            animation: fadeIn 0.3s;
+        }
+        @keyframes fadeIn {
+            from {opacity: 0; transform: scale(0.95);}
+            to {opacity: 1; transform: scale(1);}
+        }
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 25px;
+            font-size: 35px;
+            font-weight: bold;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .modal-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .modal-table th, .modal-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .modal-table th {
+            background-color: var(--highlight-bg);
+            color: var(--secondary-color);
+        }
+        .modal-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .risk-note {
+            background-color: #f8d7da;
+            border-left: 4px solid #721c24;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 0.95em;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Công cụ Hỗ trợ Quyết định Điều trị Rung Nhĩ Cơn (Paroxysmal AF) (Theo ESC 2024)</h1>
+
+        <div class="audio-player-container">
+            <h4>Tệp âm thanh: Hướng dẫn điều trị rung tâm nhĩ 2024 của ESC</h4>
+            <!-- LƯU Ý: Để trình phát âm thanh hoạt động, bạn cần đặt tệp âm thanh vào cùng thư mục với tệp HTML này. -->
+            <audio controls>
+                <source src="Hướng dẫn điều trị rung tâm nhĩ 2024 của ESC.wav" type="audio/wav">
+                <source src="Hướng dẫn điều trị rung tâm nhĩ 2024 của ESC.mp3" type="audio/mpeg">
+                Trình duyệt của bạn không hỗ trợ phát âm thanh. Vui lòng đảm bảo tệp âm thanh ở đúng vị trí.
+            </audio>
+        </div>
+        
+        <div class="info-box">
+            <strong>Lộ trình Chăm sóc AF-CARE:</strong> Công cụ này dựa trên lộ trình AF-CARE toàn diện, lấy bệnh nhân làm trung tâm. <strong>Chia sẻ quyết định (Shared Decision-Making)</strong> là trụ cột cốt lõi, đảm bảo mọi lựa chọn điều trị đều được thảo luận và có sự đồng thuận giữa đội ngũ y tế, bệnh nhân và gia đình.
+        </div>
+
+        <!-- I. Chẩn đoán và Đánh giá ban đầu -->
+        <section id="phan1">
+            <h2>I. Chẩn đoán và Đánh giá ban đầu</h2>
+            <div class="form-group">
+                <label><input type="checkbox" id="chandoan_ecg"> Xác nhận rung nhĩ bằng ECG</label>
+            </div>
+            <div class="form-group">
+                <label>Đánh giá triệu chứng (Thang điểm EHRA): 
+                    <select id="ehra_score">
+                        <option value="Không xác định">-- Chọn --</option>
+                        <option value="1 (Không có triệu chứng)">1 (Không có triệu chứng)</option>
+                        <option value="2a (Triệu chứng nhẹ)">2a (Triệu chứng nhẹ)</option>
+                        <option value="2b (Triệu chứng trung bình)">2b (Triệu chứng trung bình)</option>
+                        <option value="3 (Triệu chứng nặng)">3 (Triệu chứng nặng)</option>
+                        <option value="4 (Triệu chứng tàn phế)">4 (Triệu chứng tàn phế)</option>
+                    </select>
+                </label>
+            </div>
+            
+            <details id="symptom-assessment">
+                <summary>Đánh giá chi tiết triệu chứng (Nhấn để mở)</summary>
+                <div class="details-content" id="symptom-checklist">
+                    <p>Đánh dấu các triệu chứng bệnh nhân có trải qua liên quan đến rung nhĩ:</p>
+                    <div class="form-group"><label><input type="checkbox" name="symptom"> Hồi hộp, đánh trống ngực</label></div>
+                    <div class="form-group"><label><input type="checkbox" name="symptom"> Mệt mỏi, giảm khả năng gắng sức</label></div>
+                    <div class="form-group"><label><input type="checkbox" name="symptom"> Khó thở (khi gắng sức hoặc nghỉ ngơi)</label></div>
+                    <div class="form-group"><label><input type="checkbox" name="symptom"> Chóng mặt, choáng váng, muốn ngất</label></div>
+                    <div class="form-group"><label><input type="checkbox" name="symptom"> Đau ngực, tức ngực</label></div>
+                    <div class="form-group"><label><input type="checkbox" name="symptom"> Lo lắng, bất an</label></div>
+                    <hr>
+                    <div class="form-group">
+                        <label style="font-weight:bold; color:var(--secondary-color);"><input type="checkbox" id="is_symptomatic"> Kết luận: Bệnh nhân CÓ triệu chứng liên quan đến rung nhĩ, ảnh hưởng đến chất lượng cuộc sống.</label>
+                    </div>
+                </div>
+            </details>
+            
+             <div class="form-group">
+                <label>Loại rung nhĩ:</label>
+                <label><input type="radio" name="af_type" value="Cơn (Paroxysmal)" checked> Rung nhĩ cơn (Paroxysmal)</label>
+                <label><input type="radio" name="af_type" value="Dai dẳng (Persistent)"> Rung nhĩ dai dẳng (Persistent)</label>
+                <label><input type="radio" name="af_type" id="af_type_permanent" value="Vĩnh viễn (Permanent)"> Rung nhĩ vĩnh viễn (Permanent)</label>
+                <div id="permanent_af_note" class="info" style="display:none; font-size: 0.9em; margin-top: 5px;">
+                    Lưu ý: Lựa chọn này hàm ý đã có sự đồng thuận giữa bác sĩ và bệnh nhân về việc không tiếp tục theo đuổi chiến lược phục hồi nhịp xoang.
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Siêu âm tim (TTE) - LVEF (%): <input type="number" id="lvef" placeholder="VD: 55"></label>
+            </div>
+        </section>
+
+        <!-- II. Quyết định Kháng đông -->
+        <section id="phan2">
+            <h2>II. Quyết định Kháng đông</h2>
+            <h3>1. Đánh giá nguy cơ huyết khối (CHA₂DS₂-VA)</h3>
+            <p>Chọn các yếu tố nguy cơ của bệnh nhân:</p>
+            <div id="cha2ds2va-calculator">
+                <div class="form-group"><label><input type="checkbox" data-points="1" name="cha2ds2va"><b>C</b> - Suy tim (triệu chứng/dấu hiệu hoặc LVEF ≤40%)</label></div>
+                <div class="form-group"><label><input type="checkbox" data-points="1" name="cha2ds2va"><b>H</b> - Tăng huyết áp</label></div>
+                <div class="form-group"><label><input type="checkbox" data-points="2" name="cha2ds2va" id="age_75"><b>A₂</b> - Tuổi ≥ 75</label></div>
+                <div class="form-group"><label><input type="checkbox" data-points="1" name="cha2ds2va"><b>D</b> - Đái tháo đường</label></div>
+                <div class="form-group"><label><input type="checkbox" data-points="2" name="cha2ds2va"><b>S₂</b> - Tiền sử Đột quỵ/TIA/Huyết khối</label></div>
+                <div class="form-group"><label><input type="checkbox" data-points="1" name="cha2ds2va"><b>V</b> - Bệnh mạch máu (CAD, PVD, mảng xơ vữa ĐMC)</label></div>
+                <div class="form-group"><label><input type="checkbox" data-points="1" name="cha2ds2va" id="age_65_74"><b>A</b> - Tuổi 65–74</label></div>
+            </div>
+            <p style="text-align: center; font-size: 1.2em;">Tổng điểm: <span id="cha2ds2va-score" class="score-display">0</span></p>
+
+            <h3>Khuyến cáo Kháng đông</h3>
+             <div class="form-group">
+                <label><input type="checkbox" id="hcm_amyloidosis"> Bệnh cơ tim phì đại (HCM) hoặc Amyloidosis tim</label>
+            </div>
+            <div id="anticoag-recommendation" class="recommendation"></div>
+            
+            <details>
+                <summary>Lựa chọn Thuốc Chống đông và Quản lý</summary>
+                <div class="details-content">
+                    <p><strong>Ưu tiên DOACs (Class I):</strong> KHUYẾN CÁO sử dụng DOACs thay thế VKAs (trừ bệnh nhân có van tim cơ học hoặc hẹp van hai lá trung bình-nặng).</p>
+                    
+                    <button id="open-doac-modal-btn" class="secondary-button">Xem Bảng chi tiết Liều DOACs</button>
+                    
+                    <p style="margin-top:20px;"><strong>VKAs:</strong> Nếu dùng, mục tiêu INR 2.0-3.0 và TTR >70%.</p>
+                     <div class="decision-point">
+                        <label><input type="checkbox" id="sddm_bleeding_risk"> Đã thảo luận với bệnh nhân về các yếu tố nguy cơ chảy máu có thể thay đổi và kế hoạch quản lý.</label>
+                    </div>
+                </div>
+            </details>
+             <!-- MỤC LAAO ĐƯỢC CẬP NHẬT -->
+             <details>
+                <summary>Bít tiểu nhĩ trái (LAA Occlusion - LAAO)</summary>
+                <div class="details-content">
+                    <h4>1. Bít tiểu nhĩ trái bằng phẫu thuật (Surgical LAAO)</h4>
+                    <ul>
+                        <li>
+                            <strong>Là liệu pháp bổ trợ trong phẫu thuật tim (Class I, Mức độ B):</strong>
+                            <p class="recommendation class-i" style="font-weight:normal; font-size: 1em;">KHUYẾN CÁO ở bệnh nhân rung nhĩ đang phẫu thuật tim (vì một chỉ định khác), như một liệu pháp bổ trợ cho thuốc chống đông (OAC), để phòng ngừa đột quỵ.</p>
+                        </li>
+                         <li>
+                            <strong>Trong quá trình triệt đốt rung nhĩ nội soi/hybrid (Class IIa, Mức độ C):</strong>
+                            <p class="recommendation class-iia" style="font-weight:normal; font-size: 1em;">NÊN CÂN NHẮC khâu đóng LAA kết hợp OAC ở bệnh nhân rung nhĩ đang thực hiện các thủ thuật này.</p>
+                        </li>
+                        <li>
+                            <strong>Lưu ý quan trọng:</strong> OAC nên được tiếp tục ở tất cả bệnh nhân có nguy cơ thuyên tắc huyết khối, bất kể kết quả nhịp tim hay việc bít tiểu nhĩ trái được thực hiện.
+                        </li>
+                    </ul>
+                    
+                    <h4>2. Bít tiểu nhĩ trái qua da (Percutaneous LAAO)</h4>
+                    <ul>
+                        <li>
+                            <strong>Chỉ định chính (Class IIb, Mức độ C):</strong>
+                            <p class="recommendation class-iib" style="font-weight:normal; font-size: 1em;">CÓ THỂ CÂN NHẮC ở những bệnh nhân rung nhĩ có **chống chỉ định tuyệt đối và lâu dài** với tất cả các loại thuốc chống đông đường uống (cả DOACs và VKAs), nhằm phòng ngừa đột quỵ.</p>
+                        </li>
+                         <li>
+                            <strong>Điều trị chống huyết khối sau thủ thuật:</strong> Việc điều trị sau thủ thuật (ví dụ: DAPT) vẫn có nguy cơ chảy máu và quyết định cần được cá nhân hóa.
+                        </li>
+                    </ul>
+
+                    <div class="risk-note">
+                        <strong>Rủi ro thủ thuật LAAO qua da:</strong> Thủ thuật có các rủi ro đáng kể như đột quỵ, chảy máu nặng, huyết khối liên quan đến thiết bị, tràn dịch màng tim, và tử vong. Cần thảo luận kỹ với bệnh nhân.
+                    </div>
+                </div>
+            </details>
+        </section>
+
+        <!-- III & IV. Chiến lược Kiểm soát -->
+        <section id="phan3_4">
+            <h2>III & IV. Chiến lược Kiểm soát Tần số và Nhịp</h2>
+            
+            <div class="shared-decision-module">
+                <h4>Thảo luận và Chia sẻ Quyết định về Chiến lược Điều trị</h4>
+                
+                <details id="comparison-checklist">
+                    <summary>Bảng so sánh chi tiết các chiến lược (Nhấn để mở)</summary>
+                    <div class="comparison-grid">
+                        <div class="grid-header">Tiêu chí</div>
+                        <div class="grid-header">Kiểm soát Tần số</div>
+                        <div class="grid-header">Kiểm soát Nhịp (Thuốc)</div>
+                        <div class="grid-header">Kiểm soát Nhịp (Triệt đốt)</div>
+                        
+                        <div class="grid-label">Mục tiêu chính</div>
+                        <div class="grid-cell">Ngăn tim đập quá nhanh, giảm triệu chứng do tần số cao.</div>
+                        <div class="grid-cell">Loại bỏ rung nhĩ, khôi phục và duy trì nhịp xoang.</div>
+                        <div class="grid-cell">Duy trì nhịp xoang bền vững, ngăn tái phát, cải thiện chức năng tim.</div>
+
+                        <div class="grid-label">Thuận lợi</div>
+                        <div class="grid-cell"><ul><li>Đơn giản, dễ áp dụng</li><li>Ít rủi ro từ thuốc chống loạn nhịp (AAD)</li><li>Chấp nhận AF là mạn tính</li></ul></div>
+                        <div class="grid-cell"><ul><li>Cải thiện triệu chứng, chất lượng sống</li><li>Giảm tái cấu trúc nhĩ</li><li>Giảm nguy cơ bệnh cơ tim do nhịp nhanh</li></ul></div>
+                        <div class="grid-cell"><ul><li>Hiệu quả cao nhất trong duy trì nhịp xoang</li><li>Có thể giảm/ngưng thuốc sau ablation</li><li>Cải thiện chức năng tim rõ rệt</li></ul></div>
+                        
+                        <div class="grid-label">Bất lợi</div>
+                        <div class="grid-cell"><ul><li>AF vẫn tồn tại, nguy cơ đột quỵ không đổi</li><li>Triệu chứng có thể không hết</li><li>Có thể gây nhịp chậm</li></ul></div>
+                        <div class="grid-cell"><ul><li>Phức tạp hơn</li><li>AAD có nhiều tác dụng phụ</li><li>Tái phát AF nếu ngưng thuốc</li></ul></div>
+                        <div class="grid-cell"><ul><li>Thủ thuật xâm lấn</li><li>Cần theo dõi sau đốt</li><li>Vẫn có nguy cơ tái phát AF</li></ul></div>
+
+                        <div class="grid-label">Tác dụng phụ / Biến chứng</div>
+                        <div class="grid-cell"><ul><li>Nhịp quá chậm, ngất</li><li>Mệt mỏi, tụt HA</li><li>Bloc nhĩ-thất</li></ul></div>
+                        <div class="grid-cell"><ul><li>Tác dụng phụ ngoài tim (gan, phổi, tuyến giáp)</li><li>Tiền loạn nhịp</li></ul></div>
+                        <div class="grid-cell"><ul><li>Chèn ép tim, tràn dịch màng tim</li><li>Hẹp tĩnh mạch phổi</li><li>Đột quỵ trong/sau đốt</li></ul></div>
+                        
+                        <div class="grid-label">Tỷ lệ duy trì nhịp xoang</div>
+                        <div class="grid-cell">Thấp (~20–30%)</div>
+                        <div class="grid-cell">Trung bình (~50–70%)</div>
+                        <div class="grid-cell">Cao (~70–90%)</div>
+
+                        <div class="grid-label">Triệu chứng</div>
+                        <div class="grid-cell">Có thể vẫn còn</div>
+                        <div class="grid-cell">Giảm rõ nếu thuốc hiệu quả</div>
+                        <div class="grid-cell">Giảm rõ, cải thiện chất lượng sống</div>
+                        
+                        <div class="grid-label">Tác động chức năng tim</div>
+                        <div class="grid-cell">Có thể xấu đi nếu tần số cao kéo dài</div>
+                        <div class="grid-cell">Có thể cải thiện nếu duy trì nhịp xoang</div>
+                        <div class="grid-cell">Cải thiện rõ nhất nếu thành công</div>
+                        
+                        <div class="grid-label">Khuyến cáo ESC 2024</div>
+                        <div class="grid-cell"><b>I B:</b> Ưu tiên ở BN ít triệu chứng</div>
+                        <div class="grid-cell"><b>I A:</b> Ưu tiên nếu muốn duy trì nhịp xoang<br><b>IIa B:</b> Nếu có triệu chứng dù đã kiểm soát tần số</div>
+                        <div class="grid-cell"><b>I A:</b> Lựa chọn đầu tay ở BN rung nhĩ cơn (PAF) CÓ TRIỆU CHỨNG</div>
+                        
+                        <div class="grid-label">Kháng đông dài hạn</div>
+                        <div class="grid-cell">Theo CHA₂DS₂-VASc</div>
+                        <div class="grid-cell">Theo CHA₂DS₂-VASc (OAC quanh chuyển nhịp)</div>
+                        <div class="grid-cell">OAC ít nhất 2 tháng sau đốt, sau đó theo CHA₂DS₂-VASc</div>
+                    </div>
+                </details>
+
+                <div class="form-group" style="margin-top:20px;">
+                    <label><u>Nội dung đã thảo luận với bệnh nhân (dựa trên bảng trên):</u></label>
+                    <label><input type="checkbox" id="discuss_rate"> Lợi ích/Rủi ro của Kiểm soát Tần số.</label>
+                    <label><input type="checkbox" id="discuss_rhythm"> Lợi ích/Rủi ro của Kiểm soát Nhịp (bằng thuốc và/hoặc triệt đốt).</label>
+                    <label><input type="checkbox" id="discuss_recommendation"> Độ mạnh khuyến cáo phù hợp với tình trạng bệnh nhân.</label>
+                </div>
+                <div class="form-group">
+                    <label for="patient_decision"><u>Quyết định cuối cùng của bệnh nhân sau thảo luận:</u></label>
+                    <select id="patient_decision">
+                        <option value="Chưa ghi nhận">-- Chọn quyết định --</option>
+                        <option value="Đồng thuận Kiểm soát Tần số">Bệnh nhân đồng thuận Kiểm soát Tần số</option>
+                        <option value="Đồng thuận Kiểm soát Nhịp (Ưu tiên thuốc)">Bệnh nhân đồng thuận Kiểm soát Nhịp (Ưu tiên thuốc)</option>
+                        <option value="Đồng thuận Kiểm soát Nhịp (Ưu tiên triệt đốt)">Bệnh nhân đồng thuận Kiểm soát Nhịp (Ưu tiên triệt đốt)</option>
+                        <option value="Cần thêm thời gian">Bệnh nhân cần thêm thời gian để quyết định</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                     <label for="re_evaluation_time"><u>Thời gian tái đánh giá khuyến cáo:</u></label>
+                     <input type="text" id="re_evaluation_time" placeholder="VD: 3 tháng">
+                </div>
+            </div>
+            
+            <div class="decision-point">
+                <label>Lựa chọn chiến lược ban đầu của bác sĩ:</label>
+                <div style="padding-top:10px;">
+                    <label><input type="radio" name="strategy" value="rate"> Kiểm soát Tần số (Rate Control)</label>
+                    <label><input type="radio" name="strategy" value="rhythm" checked> Kiểm soát Nhịp (Rhythm Control)</label>
+                </div>
+            </div>
+
+            <div id="rate-control-section" style="display:none;">
+                <h3>Kiểm soát Tần số (Rate Control)</h3>
+                <p><strong>Mục tiêu:</strong> Nhịp tim nghỉ < 110 lần/phút (kiểm soát lỏng lẻo).</p>
+                <div id="rate-control-options">
+                     <p class="recommendation info">Vui lòng nhập LVEF ở phần I để xem khuyến cáo.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- V. Kiểm soát Nhịp -->
+        <section id="rhythm-control-section">
+            <h2>V. Kiểm soát Nhịp (Rhythm Control)</h2>
+            <div class="decision-point">
+                <label><input type="checkbox" id="sddm_rhythm_control"> Đã đạt đồng thuận với bệnh nhân về các phương pháp cụ thể trong kiểm soát nhịp.</label>
+            </div>
+
+            <details open>
+                <summary>1. Triệt đốt qua catheter (Catheter Ablation)</summary>
+                <div class="details-content">
+                    <p class="recommendation class-i"><strong>Class I A:</strong> KHUYẾN CÁO là lựa chọn ban đầu trong chiến lược kiểm soát nhịp cho rung nhĩ CƠN có triệu chứng, dựa trên quyết định chung với bệnh nhân, để giảm triệu chứng và tái phát.</p>
+                    <p class="recommendation class-iib"><strong>Class IIb:</strong> CÓ THỂ CÂN NHẮC là lựa chọn ban đầu cho rung nhĩ DAI DẲNG có triệu chứng.</p>
+                </div>
+            </details>
+            <details>
+                <summary>2. Chuyển nhịp bằng thuốc (Pharmacological Cardioversion)</summary>
+                 <div class="details-content">
+                    <p><strong>Flecainide/Propafenone IV (Class I):</strong> Nếu không có bệnh tim cấu trúc nặng, suy tim HFrEF, bệnh mạch vành.</p>
+                    <p><strong>Amiodarone IV (Class I):</strong> Nếu có bệnh tim cấu trúc nặng, suy tim HFrEF, bệnh mạch vành.</p>
+                </div>
+            </details>
+            <details>
+                <summary>3. Sốc điện chuyển nhịp (Electrical Cardioversion)</summary>
+                 <div class="details-content">
+                    <p><strong>Huyết động không ổn định (Class I):</strong> Sốc điện ngay lập tức.</p>
+                    <p><strong>Rung nhĩ dai dẳng có triệu chứng (Class IIa):</strong> NÊN CÂN NHẮC.</p>
+                </div>
+            </details>
+        </section>
+
+        <!-- VI. Quản lý Bệnh đồng mắc -->
+        <section id="phan6">
+            <h2>VI. Quản lý Bệnh đồng mắc và Yếu tố Nguy cơ (AF-CARE)</h2>
+            <p>Checklist các yếu tố nguy cơ cần quản lý liên tục:</p>
+            <div class="form-group"><label><input type="checkbox"> <strong>Tăng huyết áp:</strong> Kiểm soát chặt chẽ (mục tiêu 120–129/70–79 mmHg).</label></div>
+            <div class="form-group"><label><input type="checkbox"> <strong>Suy tim:</strong> Điều trị theo hướng dẫn, dùng SGLT2i bất kể LVEF.</label></div>
+            <div class="form-group"><label><input type="checkbox"> <strong>Đái tháo đường:</strong> Kiểm soát đường huyết hiệu quả.</label></div>
+            <div class="form-group"><label><input type="checkbox"> <strong>Béo phì/Thừa cân:</strong> Giảm cân ≥10% trọng lượng cơ thể.</label></div>
+            <div class="form-group"><label><input type="checkbox"> <strong>Ngưng thở khi ngủ (OSA):</strong> Cân nhắc quản lý.</label></div>
+            <div class="form-group"><label><input type="checkbox"> <strong>Rượu:</strong> Giảm tiêu thụ ≤3 đơn vị/tuần.</label></div>
+            <div class="form-group"><label><input type="checkbox"> <strong>Hoạt động thể chất:</strong> Duy trì lối sống năng động.</label></div>
+        </section>
+        
+        <!-- Tóm tắt -->
+        <hr style="margin-top: 40px;">
+        <button id="generate-summary-btn">Tạo Tóm Tắt Bệnh Án</button>
+        <div id="summary-section" class="summary-section">
+            <h2>Tóm Tắt Đánh Giá và Kế Hoạch Điều Trị</h2>
+            <pre id="summary-content"></pre>
+        </div>
+    </div>
+
+    <div id="doac-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h3>Bảng chi tiết liều lượng và lưu ý khi dùng DOACs</h3>
+            <table class="modal-table">
+                <thead>
+                    <tr>
+                        <th>Thuốc</th>
+                        <th>Liều chuẩn</th>
+                        <th>Khi nào giảm liều</th>
+                        <th>Chống chỉ định</th>
+                        <th>Thuốc trung hòa</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Apixaban</strong></td>
+                        <td>5 mg × 2 lần/ngày</td>
+                        <td>Giảm còn 2.5 mg × 2 lần/ngày nếu có ≥2:
+                            <ul>
+                                <li>Tuổi ≥ 80</li>
+                                <li>Cân nặng ≤ 60 kg</li>
+                                <li>Creatinine ≥1.5 mg/dL</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>ClCr &lt;15 ml/phút</li>
+                                <li>Suy gan nặng</li>
+                                <li>Dùng thuốc ức chế CYP3A4 mạnh</li>
+                            </ul>
+                        </td>
+                        <td>Andexanet alfa (nếu có) hoặc PCC liều cao</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Dabigatran</strong></td>
+                        <td>150 mg × 2 lần/ngày</td>
+                        <td>Giảm còn 110 mg × 2 lần/ngày nếu:
+                             <ul>
+                                <li>Tuổi ≥75</li>
+                                <li>Nguy cơ xuất huyết cao</li>
+                                <li>ClCr 30–50 ml/phút</li>
+                            </ul>
+                        </td>
+                         <td>
+                            <ul>
+                                <li>ClCr &lt;30 ml/phút</li>
+                                <li>Van tim cơ học</li>
+                                <li>Suy gan tiến triển</li>
+                            </ul>
+                        </td>
+                        <td>✅ Idarucizumab (Praxbind®) – đặc hiệu</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Edoxaban</strong></td>
+                        <td>60 mg × 1 lần/ngày</td>
+                        <td>Giảm còn 30 mg × 1 lần/ngày nếu:
+                             <ul>
+                                <li>ClCr 15–50</li>
+                                <li>Cân nặng ≤60 kg</li>
+                                <li>Dùng kèm erythromycin, dronedarone,...</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>ClCr &lt;15 ml/phút</li>
+                                <li>ClCr &gt;95 ml/phút (giảm hiệu quả)</li>
+                            </ul>
+                        </td>
+                        <td>Chưa có thuốc đặc hiệu. Dùng PCC.</td>
+                    </tr>
+                     <tr>
+                        <td><strong>Rivaroxaban</strong></td>
+                        <td>20 mg × 1 lần/ngày (với bữa ăn)</td>
+                        <td>Giảm còn 15 mg × 1 lần/ngày nếu ClCr 15–49 ml/phút</td>
+                         <td>
+                            <ul>
+                                <li>ClCr &lt;15 ml/phút</li>
+                                <li>Suy gan Child-Pugh B/C</li>
+                                <li>Dùng thuốc ức chế CYP3A4 mạnh</li>
+                            </ul>
+                        </td>
+                        <td>Andexanet alfa (nếu có) hoặc PCC liều cao</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        const inputs = document.querySelectorAll('#cha2ds2va-calculator input, #hcm_amyloidosis, input[name="strategy"], #lvef, input[name="af_type"]');
+        
+        function updateAllCalculations() {
+            calculateCha2ds2va();
+            updateAnticoagRecommendation();
+            toggleStrategySections();
+            updateRateControlOptions();
+            checkPermanentAF();
+        }
+
+        function calculateCha2ds2va() {
+            let score = 0;
+            const calculator = document.getElementById('cha2ds2va-calculator');
+            const checkboxes = calculator.querySelectorAll('input[type="checkbox"]');
+            
+            const age75 = document.getElementById('age_75').checked;
+
+            checkboxes.forEach(box => {
+                if (box.checked) {
+                    if (box.id === 'age_75') {
+                        score += parseInt(box.dataset.points);
+                    } else if (box.id === 'age_65_74') {
+                        if (!age75) {
+                           score += parseInt(box.dataset.points);
+                        }
+                    } else {
+                        score += parseInt(box.dataset.points);
+                    }
+                }
+            });
+            
+            document.getElementById('cha2ds2va-score').textContent = score;
+        }
+        
+        document.getElementById('age_75').addEventListener('change', function(){
+            if(this.checked){
+                document.getElementById('age_65_74').checked = false;
+                document.getElementById('age_65_74').dispatchEvent(new Event('change'));
+            }
+            updateAllCalculations();
+        });
+        document.getElementById('age_65_74').addEventListener('change', function(){
+            if(this.checked){
+                document.getElementById('age_75').checked = false;
+                document.getElementById('age_75').dispatchEvent(new Event('change'));
+            }
+            updateAllCalculations();
+        });
+
+        function updateAnticoagRecommendation() {
+            const score = parseInt(document.getElementById('cha2ds2va-score').textContent);
+            const recommendationEl = document.getElementById('anticoag-recommendation');
+            const hcmAmyloidosis = document.getElementById('hcm_amyloidosis').checked;
+
+            if (hcmAmyloidosis) {
+                 recommendationEl.className = 'recommendation class-i';
+                 recommendationEl.textContent = 'Bệnh cơ tim phì đại/Amyloidosis: KHUYẾN CÁO sử dụng OAC bất kể điểm CHA₂DS₂-VA (Class I).';
+                 return;
+            }
+
+            if (score >= 2) {
+                recommendationEl.className = 'recommendation class-i';
+                recommendationEl.textContent = 'Điểm ≥ 2: KHUYẾN CÁO bắt đầu thuốc chống đông đường uống (OAC) (Class I).';
+            } else if (score === 1) {
+                recommendationEl.className = 'recommendation class-iia';
+                recommendationEl.textContent = 'Điểm = 1: NÊN CÂN NHẮC bắt đầu thuốc chống đông đường uống (OAC) (Class IIa).';
+            } else { 
+                recommendationEl.className = 'recommendation info';
+                recommendationEl.textContent = 'Điểm = 0: Không khuyến cáo OAC ở bệnh nhân không có yếu tố nguy cơ bổ sung.';
+            }
+        }
+        
+        function toggleStrategySections() {
+            const strategy = document.querySelector('input[name="strategy"]:checked').value;
+            const rateSection = document.getElementById('rate-control-section');
+            const rhythmSection = document.getElementById('rhythm-control-section');
+
+            if (strategy === 'rate') {
+                rateSection.style.display = 'block';
+                rhythmSection.style.display = 'none';
+            } else {
+                rateSection.style.display = 'none';
+                rhythmSection.style.display = 'block';
+            }
+        }
+
+        function updateRateControlOptions() {
+            const lvef = parseInt(document.getElementById('lvef').value);
+            const optionsDiv = document.getElementById('rate-control-options');
+
+            if (isNaN(lvef)) {
+                 optionsDiv.innerHTML = '<p class="recommendation info">Vui lòng nhập LVEF ở phần I để xem khuyến cáo.</p>';
+                 return;
+            }
+
+            if (lvef > 40) {
+                 optionsDiv.innerHTML = '<p class="recommendation class-i"><strong>LVEF > 40%:</strong> Beta-blockers, diltiazem, verapamil, hoặc digoxin là lựa chọn đầu tiên (Class I).</p>';
+            } else {
+                 optionsDiv.innerHTML = '<p class="recommendation class-i"><strong>LVEF ≤ 40%:</strong> Beta-blockers và/hoặc digoxin là lựa chọn đầu tiên (Class I).</p>';
+            }
+        }
+        
+        function checkPermanentAF() {
+            const isPermanent = document.getElementById('af_type_permanent').checked;
+            document.getElementById('permanent_af_note').style.display = isPermanent ? 'block' : 'none';
+        }
+
+        inputs.forEach(input => {
+            input.addEventListener('change', updateAllCalculations);
+        });
+         document.getElementById('lvef').addEventListener('input', updateAllCalculations);
+        
+        document.getElementById('generate-summary-btn').addEventListener('click', function() {
+            let summary = `BÁO CÁO TÓM TẮT ĐÁNH GIÁ RUNG NHĨ\n`;
+            summary += `=====================================\n\n`;
+            
+            summary += `I. CHẨN ĐOÁN & ĐÁNH GIÁ BAN ĐẦU:\n`;
+            summary += ` - Loại rung nhĩ: ${document.querySelector('input[name="af_type"]:checked').value}\n`;
+            summary += ` - Thang điểm EHRA: ${document.getElementById('ehra_score').value}\n`;
+            
+            const isSymptomatic = document.getElementById('is_symptomatic').checked;
+            summary += ` - Tình trạng triệu chứng: ${isSymptomatic ? 'CÓ TRIỆU CHỨNG ảnh hưởng chất lượng sống' : 'Không có triệu chứng đáng kể'}\n`;
+            if (isSymptomatic) {
+                const symptoms = [];
+                document.querySelectorAll('#symptom-checklist input[name="symptom"]:checked').forEach(symptom => {
+                    symptoms.push(symptom.parentElement.textContent.trim());
+                });
+                if (symptoms.length > 0) {
+                    summary += `   - Các triệu chứng cụ thể: ${symptoms.join(', ')}\n`;
+                }
+            }
+
+            const lvef = document.getElementById('lvef').value;
+            summary += ` - Chức năng thất trái (LVEF): ${lvef ? lvef + '%' : 'Chưa nhập'}\n\n`;
+
+            const score = document.getElementById('cha2ds2va-score').textContent;
+            summary += `II. KHÁNG ĐÔNG:\n`;
+            summary += ` - Điểm CHA₂DS₂-VA: ${score} điểm\n`;
+            if (document.getElementById('hcm_amyloidosis').checked) {
+                summary += ` - Tình trạng đặc biệt: Bệnh cơ tim phì đại / Amyloidosis\n`;
+            }
+            summary += ` - Khuyến cáo: ${document.getElementById('anticoag-recommendation').textContent}\n`;
+            if (document.getElementById('sddm_bleeding_risk').checked) {
+                 summary += ` - Đã thảo luận với bệnh nhân về nguy cơ chảy máu.\n`;
+            }
+            summary += `\n`;
+            
+            const strategy = document.querySelector('input[name="strategy"]:checked').value;
+            summary += `III-V. CHIẾN LƯỢC ĐIỀU TRỊ VÀ CHIA SẺ QUYẾT ĐỊNH:\n`;
+            
+            summary += `  * Quá trình thảo luận:\n`;
+            let discussed_items = [];
+            if (document.getElementById('discuss_rate').checked) discussed_items.push("Lợi ích/Rủi ro của Kiểm soát Tần số");
+            if (document.getElementById('discuss_rhythm').checked) discussed_items.push("Lợi ích/Rủi ro của Kiểm soát Nhịp");
+            if (document.getElementById('discuss_recommendation').checked) discussed_items.push("Độ mạnh khuyến cáo");
+            if (discussed_items.length > 0) {
+                summary += `    - Đã thảo luận về: ${discussed_items.join(', ')}.\n`;
+            } else {
+                 summary += `    - Chưa ghi nhận nội dung thảo luận.\n`;
+            }
+
+            summary += `  * Quyết định của bệnh nhân: ${document.getElementById('patient_decision').value}\n`;
+            summary += `  * Thời gian tái đánh giá: ${document.getElementById('re_evaluation_time').value || 'Chưa xác định'}\n\n`;
+            
+            summary += `  * Lựa chọn chiến lược của bác sĩ: ${strategy === 'rate' ? 'Kiểm soát Tần số' : 'Kiểm soát Nhịp'}\n`;
+            
+            if (strategy === 'rate') {
+                summary += `    - ${document.querySelector('#rate-control-options p').textContent}\n`;
+            } else {
+                 if (document.getElementById('sddm_rhythm_control').checked) {
+                    summary += `    - Đã đồng thuận với bệnh nhân về phương pháp kiểm soát nhịp cụ thể.\n`;
+                }
+                summary += `    - Khuyến cáo chính cho rung nhĩ cơn có triệu chứng: Triệt đốt qua catheter là lựa chọn đầu tay (Class I A).\n`;
+            }
+            summary += `\n`;
+
+            summary += `VI. QUẢN LÝ YẾU TỐ NGUY CƠ (AF-CARE):\n`;
+            const riskFactors = document.querySelectorAll('#phan6 input[type="checkbox"]:checked');
+            if (riskFactors.length > 0) {
+                riskFactors.forEach(factor => {
+                    summary += ` - Cần quản lý: ${factor.parentElement.textContent.trim()}\n`;
+                });
+            } else {
+                summary += ` - Chưa chọn yếu tố nguy cơ cần quản lý.\n`;
+            }
+
+            document.getElementById('summary-content').textContent = summary;
+            document.getElementById('summary-section').style.display = 'block';
+        });
+
+        const modal = document.getElementById('doac-modal');
+        const openBtn = document.getElementById('open-doac-modal-btn');
+        const closeBtn = document.querySelector('.close-button');
+
+        openBtn.onclick = function() {
+            modal.style.display = 'block';
+        }
+        closeBtn.onclick = function() {
+            modal.style.display = 'none';
+        }
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        updateAllCalculations();
+    });
+    </script>
+
+</body>
+</html>
