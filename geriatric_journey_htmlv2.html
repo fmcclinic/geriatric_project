@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lộ Trình Bệnh Nhân Phòng Khám Lão Khoa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .main-layout {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 20px;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 300px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+            overflow: hidden;
+        }
+        
+        .container {
+            flex: 1;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .journey-map {
+            padding: 30px;
+        }
+        
+        .stage {
+            margin-bottom: 40px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .stage:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stage-header {
+            padding: 20px 30px;
+            color: white;
+            font-size: 1.4em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .stage-content {
+            padding: 30px;
+            background: white;
+        }
+        
+        .stage-0 .stage-header { background: linear-gradient(135deg, #ff6b6b, #ee5a24); }
+        .stage-1 .stage-header { background: linear-gradient(135deg, #4834d4, #686de0); }
+        .stage-2 .stage-header { background: linear-gradient(135deg, #00d2d3, #54a0ff); }
+        .stage-3 .stage-header { background: linear-gradient(135deg, #5f27cd, #a55eea); }
+        .stage-4 .stage-header { background: linear-gradient(135deg, #fd9644, #f8b500); }
+        .stage-5 .stage-header { background: linear-gradient(135deg, #2ed573, #7bed9f); }
+        .stage-6 .stage-header { background: linear-gradient(135deg, #70a1ff, #5352ed); }
+        
+        .step-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .step {
+            background: #f8f9ff;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 5px solid;
+            transition: all 0.3s ease;
+        }
+        
+        .step:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stage-0 .step { border-left-color: #ff6b6b; }
+        .stage-1 .step { border-left-color: #4834d4; }
+        .stage-2 .step { border-left-color: #00d2d3; }
+        .stage-3 .step { border-left-color: #5f27cd; }
+        .stage-4 .step { border-left-color: #fd9644; }
+        .stage-5 .step { border-left-color: #2ed573; }
+        .stage-6 .step { border-left-color: #70a1ff; }
+        
+        .step-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .step-content {
+            color: #5a6c7d;
+            line-height: 1.6;
+        }
+        
+        .step-content ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .step-content li {
+            padding: 5px 0;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .step-content li:before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: #3498db;
+            font-size: 0.8em;
+        }
+        
+        .decision-box {
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+            color: #2d3436;
+            box-shadow: 0 5px 15px rgba(253, 203, 110, 0.3);
+        }
+        
+        .flow-arrow {
+            text-align: center;
+            font-size: 2em;
+            color: #74b9ff;
+            margin: 20px 0;
+            animation: bounce 2s infinite;
+        }
+        
+        
+        .sidebar-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+        }
+        
+        .sidebar-header h2 {
+            font-size: 1.4em;
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-header p {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+        
+        .toc {
+            padding: 20px;
+        }
+        
+        .toc-section {
+            margin-bottom: 25px;
+        }
+        
+        .toc-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        
+        .toc-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .toc-item {
+            margin-bottom: 8px;
+        }
+        
+        .toc-link {
+            display: block;
+            color: #5a6c7d;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+            border-left: 3px solid transparent;
+        }
+        
+        .toc-link:hover {
+            background: #f8f9ff;
+            color: #3498db;
+            border-left-color: #3498db;
+            transform: translateX(5px);
+        }
+        
+        .toc-link.stage-0 { border-left-color: #ff6b6b; }
+        .toc-link.stage-1 { border-left-color: #4834d4; }
+        .toc-link.stage-2 { border-left-color: #00d2d3; }
+        .toc-link.stage-3 { border-left-color: #5f27cd; }
+        .toc-link.stage-4 { border-left-color: #fd9644; }
+        .toc-link.stage-5 { border-left-color: #2ed573; }
+        .toc-link.stage-6 { border-left-color: #70a1ff; }
+        
+        .toc-link.active {
+            background: #f8f9ff;
+            color: #3498db;
+            font-weight: bold;
+        }
+        
+        .external-link {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white !important;
+            text-align: center;
+            font-weight: bold;
+            margin: 10px 0;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .external-link:hover {
+            background: linear-gradient(135deg, #5a67d8, #6b5b95);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .external-link::before {
+            content: "🔗 ";
+            margin-right: 5px;
+        }
+        
+        @media (max-width: 1024px) {
+            .main-layout {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: static;
+                margin-bottom: 20px;
+            }
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #a8e6cf, #88d8a3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #00b894;
+        }
+        
+        .highlight-box h4 {
+            color: #00b894;
+            margin-bottom: 10px;
+        }
+        
+        .new-feature {
+            background: linear-gradient(135deg, #ff7675, #fd79a8);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+            box-shadow: 0 3px 10px rgba(255, 118, 117, 0.3);
+        }
+        
+        .tech-feature {
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+            box-shadow: 0 3px 10px rgba(108, 92, 231, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="main-layout">
+        <!-- Sidebar - Mục lục -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>📚 MỤC LỤC</h2>
+                <p>Lộ trình Chăm sóc</p>
+            </div>
+            
+            <div class="toc">
+                <div class="toc-section">
+                    <div class="toc-title">🏥 Giai đoạn Chăm sóc</div>
+                    <ul class="toc-list">
+                        <li class="toc-item">
+                            <a href="#stage-0" class="toc-link stage-0">Giai đoạn 0: Đánh giá Nội viện</a>
+                        </li>
+                        <li class="toc-item">
+                            <a href="#stage-1" class="toc-link stage-1">Giai đoạn 1: Tiếp cận & Sàng lọc</a>
+                        </li>
+                        <li class="toc-item">
+                            <a href="#stage-2" class="toc-link stage-2">Giai đoạn 2: Đánh giá Chuyên sâu</a>
+                        </li>
+                        <li class="toc-item">
+                            <a href="#stage-3" class="toc-link stage-3">Giai đoạn 3: Can thiệp & Điều trị</a>
+                        </li>
+                        <li class="toc-item">
+                            <a href="#stage-4" class="toc-link stage-4">Giai đoạn 4: Theo dõi & Tái đánh giá</a>
+                        </li>
+                        <li class="toc-item">
+                            <a href="#stage-5" class="toc-link stage-5">Giai đoạn 5: Chăm sóc Liên tục</a>
+                        </li>
+                        <li class="toc-item">
+                            <a href="#stage-6" class="toc-link stage-6">Giai đoạn 6: Chăm sóc Đặc biệt</a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="toc-section">
+                    <div class="toc-title">📋 Tài liệu Tham khảo</div>
+                    <ul class="toc-list">
+                        <li class="toc-item">
+                            <a href="icp_diagram_html.html" target="_blank" class="toc-link external-link">
+                                Chi tiết về nội dung ICP
+                            </a>
+                        </li>
+                        <li class="toc-item">
+                            <a href="#overview" class="toc-link">Tổng quan Lộ trình</a>
+                        </li>
+                        <li class="toc-item">
+                            <a href="#benefits" class="toc-link">Lợi ích của Mô hình</a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="toc-section">
+                    <div class="toc-title">🔧 Công cụ Hỗ trợ</div>
+                    <ul class="toc-list">
+                        <li class="toc-item">
+                            <a href="#screening-tools" class="toc-link">Công cụ Sàng lọc</a>
+                        </li>
+                        <li class="toc-item">
+                            <a href="#assessment-forms" class="toc-link">Biểu mẫu Đánh giá</a>
+                        </li>
+                        <li class="toc-item">
+                            <a href="#care-packages" class="toc-link">Gói Dịch vụ</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="container">
+        <div class="header">
+            <h1>🏥 LỘ TRÌNH BỆNH NHÂN PHÒNG KHÁM LÃO KHOA</h1>
+            <p>Mô hình Bác sĩ Gia đình Chuyên biệt cho Người Cao Tuổi</p>
+        </div>
+        
+        <div class="journey-map">
+            
+            <!-- GIAI ĐOẠN 0: ĐÁNH GIÁ BỆNH NHÂN NỘI VIỆN -->
+            <div id="stage-0" class="stage stage-0">
+                <div class="stage-header">
+                    <span>🏥</span>
+                    <span>GIAI ĐOẠN 0: ĐÁNH GIÁ BỆNH NHÂN NỘI VIỆN</span>
+                    <span class="new-feature">MỚI</span>
+                </div>
+                <div class="stage-content">
+                    <div class="highlight-box">
+                        <h4>🎯 Mục tiêu: Phát hiện sớm và kết nối bệnh nhân cao tuổi từ bệnh viện</h4>
+                        <p>Chuyên viên lão khoa chủ động tiếp cận các bệnh nhân nội viện ổn định sắp xuất viện để đánh giá nhu cầu chăm sóc lão khoa chuyên biệt.</p>
+                    </div>
+                    
+                    <div class="step-grid">
+                        <div class="step">
+                            <div class="step-title">📋 SÀNG LỌC BỆNH NHÂN NỘI VIỆN</div>
+                            <div class="step-content">
+                                <ul>
+                                    <li>Xác định BN ≥65 tuổi ổn định y khoa</li>
+                                    <li>Đánh giá tiêu chí sắp xuất viện</li>
+                                    <li>Rà soát danh sách hàng ngày</li>
+                                    <li>Ưu tiên BN có bệnh mãn tính phức tạp</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-title">🚪 THĂM VIẾNG TẠI TẬN PHÒNG</div>
+                            <div class="step-content">
+                                <ul>
+                                    <li>Chuyên viên lão khoa đến tận phòng</li>
+                                    <li>Trao đổi với BN và gia đình</li>
+                                    <li>Đánh giá sơ bộ tình trạng chức năng</li>
+                                    <li>Giới thiệu dịch vụ lão khoa</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-title">📱 SÀNG LỌC BẰNG CÔNG CỤ ĐIỆN TỬ</div>
+                            <div class="step-content">
+                                <div class="tech-feature">AI INTEGRATED</div>
+                                <ul>
+                                    <li>Sử dụng bộ câu hỏi HTML trên tablet</li>
+                                    <li>Đánh giá nhanh ADLs, nguy cơ té ngã</li>
+                                    <li>Sàng lọc tình trạng dinh dưỡng</li>
+                                    <li>AI phân tích và đưa ra gợi ý</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-title">📋 LẬP KẾ HOẠCH CHĂM SÓC SƠ BỘ</div>
+                            <div class="step-content">
+                                <ul>
+                                    <li>Đánh giá nhu cầu chăm sóc sau xuất viện</li>
+                                    <li>Lên kế hoạch theo dõi lão khoa</li>
+                                    <li>Tư vấn gói dịch vụ phù hợp</li>
+                                    <li>Đặt lịch khám sau xuất viện</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-arrow">⬇️</div>
+            
+            <!-- GIAI ĐOẠN 1: TIẾP CẬN & SÀNG LỌC BAN ĐẦU -->
+            <div id="stage-1" class="stage stage-1">
+                <div class="stage-header">
+                    <span>📞</span>
+                    <span>GIAI ĐOẠN 1: TIẾP CẬN & SÀNG LỌC BAN ĐẦU</span>
+                </div>
+                <div class="stage-content">
+                    <div class="step-grid">
+                        <div class="step">
+                            <div class="step-title">📞 TIẾP NHẬN & ĐẶT LỊCH</div>
+                            <div class="step-content">
+                                <ul>
+                                    <li>Tiếp nhận qua phone/web/app/trực tiếp</li>
+                                    <li>Tư vấn sơ bộ về dịch vụ lão khoa</li>
+                                    <li>Ưu tiên thời gian cho người cao tuổi</li>
+                                    <li>Hướng dẫn chuẩn bị hồ sơ y tế</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-title">🚪 TIẾP ĐÓN TẠI PHÒNG KHÁM</div>
+                            <div class="step-content">
+                                <ul>
+                                    <li>Chào đón thân thiện, hỗ trợ di chuyển</li>
+                                    <li>Khu vực chờ tiện nghi cho NCT</li>
+                                    <li>Thu thập thông tin hành chính</li>
+                                    <li>Cập nhật hệ thống EHR</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-title">📋 SÀNG LỌC SỨC KHỎE TOÀN DIỆN</div>
+                            <div class="step-content">
+                                <div class="tech-feature">TABLET INTERACTIVE</div>
+                                <ul>
+                                    <li>Điều dưỡng chuyên khoa thực hiện</li>
+                                    <li>Đánh giá ADLs/IADLs, MNA-SF, GDS-SF</li>
+                                    <li>Test nguy cơ té ngã (TUG, One-Leg)</li>
+                                    <li>Sàng lọc chức năng giác quan</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-title">🤖 AI PHÂN TÍCH & GỢI Ý</div>
+                            <div class="step-content">
+                                <div class="tech-feature">GEMINI API</div>
+                                <ul>
+                                    <li>Tự động tổng hợp kết quả sàng lọc</li>
+                                    <li>AI phân tích và đưa ra gợi ý</li>
+                                    <li>Xác định mức độ ưu tiên</li>
+                                    <li>Chuẩn bị thông tin cho bác sĩ</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-arrow">⬇️</div>
+            
+            <!-- GIAI ĐOẠN 2: ĐÁNH GIÁ CHUYÊN SÂU & LẬP KẾ HOẠCH -->
+            <div id="stage-2" class="stage stage-2">
+                <div class="stage-header">
+                    <span>👨‍⚕️</span>
+                    <span>GIAI ĐOẠN 2: ĐÁNH GIÁ CHUYÊN SÂU & LẬP KẾ HOẠCH</span>
+                </div>
+                <div class="stage-content">
+                    <div class="step-grid">
+                        <div class="step">
+                            <div class="step-title">🔍 KHÁM VỚI BÁC SĨ LÃO KHOA</div>
+                            <div class="step-content">
+                                <ul>
+                                    <li>Xem xét kết quả sàng lọc + AI analysis</li>
+                                    <li>Khám lâm sàng toàn diện</li>
+                                    <li>Đánh giá tổng thể tình trạng sức khỏe</li>
+                                    <li>Phân tích các yếu tố nguy cơ</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-title">📊 PHÂN TẦNG NGUY CƠ & CHỈ ĐỊNH</div>
+                            <div class="step-content">
+                                <ul>
+                                    <li>Phân loại theo mức độ phức tạp</li>
+                                    <li>Chỉ định XN cận lâm sàng cần thiết</li>
+                                    <li>Chuyển khám các chuyên khoa</li>
+                                    <li>Đề xuất gói dịch vụ phù hợp</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="decision-box">
+                        🤔 TRƯỜNG HỢP PHỨC TẠP CẦN HỘI CHẨN?
+                    </div>
+                    
+                    <div class="step-grid">
+                        <div class="step">
+                            <div class="step-title">👥 HỘI CHẨN ĐA CHUYÊN KHOA</div>
+                            <div class="step-content">
+                                <ul>
+                                    <li>Bác sĩ lão khoa (trưởng team)</li>
+                                    <li>Chuyên gia dinh dưỡng</li>
+                                    <li>Vật lý trị liệu, tâm lý học</li>
+                                    <li>Dược sĩ lâm sàng</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-title">📝 KẾ HOẠCH CHĂM SÓC CÁ NHÂN HÓA</div>
+                            <div class="step-content">
+                                <ul>
+                                    <li>Xây dựng ICP chi tiết</li>
+                                    <li>Tư vấn bệnh nhân & gia đình</li>
+                                    <li>Thống nhất mục tiêu điều trị</li>
+                                    <li>Ký thỏa thuận chăm sóc</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-arrow">⬇️</div>
+            
+            <!-- GIAI ĐOẠN 3: CAN THIỆP & ĐIỀU TRỊ -->
+            <div id="stage-3" class="stage stage-3">
+                <div class="stage-header">
+                    <span>💊</span>
+                    <span>GIAI ĐOẠN 3: CAN THIỆP & ĐIỀU TRỊ</span>
+                </div>
+                <div class="stage-content">
+                    <div class="step-grid">
+                        <div class="step">
+                            <div class="step-title">🎯 THỰC HIỆN ĐIỀU TRỊ TỔNG HỢP</div>
+                            <div class="step-content">
+                                <ul>
+                                    <li>Kê đơn thuốc & tư vấn dược học</li>
+                                    <li>Thực hiện thủ thuật, tiêm chủng</li>
+                                    <li>Vật lý trị liệu & phục hồi chức năng</li>
+                                    <li>Tư vấn dinh dưỡng cá nhân hóa</li>
+                                    <li>Hỗ trợ tâm lý chuyên sâu</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="decision-box">
+                        🏠 BN CÓ ĐĂNG KÝ DỊCH VỤ CHĂM SÓC TẠI NHÀ?
+                    </div>
+                    
+                    <div class="step-grid">
+                        <div class="step">
+                            <div class="step-title">👩‍⚕️ HOME CARE SERVICE</div>
+                            <div class="step-content">
+                                <div class="new-feature">PREMIUM</div>
+                                <ul>
+                                    <li>Điều dưỡng chuyên khoa đến nhà</li>
+                                    <li>Vật lý trị liệu tại nhà</li>
+                                    <li>Chăm sóc vết thương</li>
+                                    <li>Hỗ trợ sinh hoạt hàng ngày</li>
+                                    <li>Giám sát việc uống thuốc</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-arrow">⬇️</div>
+            
+            <!-- GIAI ĐOẠN 4: THEO DÕI & TÁI ĐÁNH GIÁ -->
+            <div id="stage-4" class="stage stage-4">
+                <div class="stage-header">
+                    <span>📅</span>
+                    <span>GIAI ĐOẠN 4: THEO DÕI & TÁI ĐÁNH GIÁ</span>
+                </div>
+                <div class="stage-content">
+                    <div class="step-grid">
+                        <div class="step">
+                            <div class="step-title">🔄 TÁI KHÁM ĐỊNH KỲ</div>
+                            <div class="step-content">
+                                <ul>
+                                    <li>Theo dõi tiến triển bệnh lý</li>
+                                    <li>Đánh giá hiệu quả điều trị</li>
+                                    <li>Điều chỉnh phác đồ khi cần</li>
+                                    <li>Xét nghiệm theo dõi định kỳ</li>
+                                    <li>Đánh giá mức độ hài lòng</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-title">📱 HỖ TRỢ TỪ XA 24/7</div>
+                            <div class="step-content">
+                                <div class="tech-feature">DIGITAL HEALTH</div>
+                                <ul>
+                                    <li>Hotline chuyên biệt cho NCT</li>
+                                    <li>App di động tư vấn sức khỏe</li>
+                                    <li>Telemedicine consultation</li>
+                                    <li>Thiết bị giám sát IoT</li>
+                                    <li>Nhắc nhở uống thuốc thông minh</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-title">📊 TÁI ĐÁNH GIÁ CHỨC NĂNG</div>
+                            <div class="step-content">
+                                <ul>
+                                    <li>Chu kỳ đánh giá 6 tháng - 1 năm</li>
+                                    <li>Sử dụng lại bộ công cụ sàng lọc</li>
+                                    <li>So sánh với baseline ban đầu</li>
+                                    <li>Phát hiện suy giảm chức năng mới</li>
+                                    <li>Cập nhật ICP theo tình trạng mới</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-arrow">⬇️</div>
+            
+            <!-- GIAI ĐOẠN 5: CHĂM SÓC LIÊN TỤC & MỞ RỘNG -->
+            <div id="stage-5" class="stage stage-5">
+                <div class="stage-header">
+                    <span>🌟</span>
+                    <span>GIAI ĐOẠN 5: CHĂM SÓC LIÊN TỤC & MỞ RỘNG</span>
+                </div>
+                <div class="stage-content">
+                    <div class="step-grid">
+                        <div class="step">
+                            <div class="step-title">🔁 QUẢN LÝ BỆNH MÃN TÍNH DÀI HẠN</div>
+                            <div class="step-content">
+                                <ul>
+                                    <li>Theo dõi liên tục các bệnh mãn tính</li>
+                                    <li>Phòng ngừa biến chứng sớm</li>
+                                    <li>Cập nhật phác đồ điều trị mới</li>
+                                    <li>Đảm bảo ổn định tình trạng sức khỏe</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-title">👥 KẾT NỐI CỘNG ĐỒNG</div>
+                            <div class="step-content">
+                                <ul>
+                                    <li>Câu lạc bộ dưỡng sinh</li>
+                                    <li>Nhóm hoạt động xã hội</li>
+                                    <li>Chương trình tình nguyện</li>
+                                    <li>Nhóm đọc sách, sinh hoạt văn hóa</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-title">👨‍👩‍👧‍👦 HỖ TRỢ GIA ĐÌNH</div>
+                            <div class="step-content">
+                                <ul>
+                                    <li>Đào tạo người chăm sóc</li>
+                                    <li>Giáo dục dinh dưỡng gia đình</li>
+                                    <li>Tư vấn tâm lý cho người thân</li>
+                                    <li>Hướng dẫn chăm sóc tại nhà</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-arrow">⬇️</div>
+            
+            <!-- GIAI ĐOẠN 6: CHĂM SÓC ĐẶC BIỆT & CẢI TIẾN -->
+            <div id="stage-6" class="stage stage-6">
+                <div class="stage-header">
+                    <span>🕊️</span>
+                    <span>GIAI ĐOẠN 6: CHĂM SÓC ĐẶC BIỆT & CẢI TIẾN</span>
+                </div>
+                <div class="stage-content">
+                    <div class="step-grid">
+                        <div class="step">
+                            <div class="step-title">🕊️ CHĂM SÓC GIẢM NHẸ</div>
+                            <div class="step-content">
+                                <ul>
+                                    <li>Palliative care cho bệnh nặng</li>
+                                    <li>Kiểm soát triệu chứng tối ưu</li>
+                                    <li>Hỗ trợ tâm lý - tâm linh</li>
+                                    <li>Tư vấn gia đình trong giai đoạn cuối</li>
+                                    <li>Đảm bảo chất lượng cuộc sống</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-title">📈 CẢI TIẾN CHẤT LƯỢNG LIÊN TỤC</div>
+                            <div class="step-

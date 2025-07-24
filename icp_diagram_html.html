@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nội dung ICP - Kế hoạch Chăm sóc Cá nhân hóa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .icp-diagram {
+            padding: 30px;
+            background: #f8f9fa;
+        }
+        
+        .central-circle {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            margin: 40px auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+            position: relative;
+        }
+        
+        .central-circle .subtitle {
+            font-size: 0.6em;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+        
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .component-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-left: 5px solid;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .component-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .component-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 80px;
+            height: 80px;
+            opacity: 0.1;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7v10c0 5.55 3.84 9.95 9 11 5.16-1.05 9-5.45 9-11V7l-10-5z"/></svg>') no-repeat center;
+            background-size: contain;
+        }
+        
+        .component-1 { border-left-color: #e74c3c; }
+        .component-2 { border-left-color: #3498db; }
+        .component-3 { border-left-color: #2ecc71; }
+        .component-4 { border-left-color: #f39c12; }
+        .component-5 { border-left-color: #9b59b6; }
+        .component-6 { border-left-color: #1abc9c; }
+        .component-7 { border-left-color: #e67e22; }
+        .component-8 { border-left-color: #34495e; }
+        
+        .component-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 15px;
+        }
+        
+        .component-icon {
+            font-size: 2.5em;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
+        }
+        
+        .component-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .component-content {
+            color: #5a6c7d;
+            line-height: 1.6;
+        }
+        
+        .component-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .component-list li {
+            padding: 8px 0;
+            position: relative;
+            padding-left: 25px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .component-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .component-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .priority-badge {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        .timeline-badge {
+            background: linear-gradient(135deg, #4834d4, #686de0);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        .cost-badge {
+            background: linear-gradient(135deg, #00d2d3, #54a0ff);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        .process-flow {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .process-title {
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        
+        .process-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .process-step {
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .step-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            margin: 0 auto 15px;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .step-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .step-desc {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .process-step:not(:last-child)::after {
+            content: "→";
+            position: absolute;
+            right: -25px;
+            top: 35px;
+            font-size: 2em;
+            color: #3498db;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .process-steps {
+                flex-direction: column;
+            }
+            
+            .process-step:not(:last-child)::after {
+                content: "↓";
+                right: auto;
+                top: auto;
+                bottom: -30px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            
+            .components-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #a8e6cf, #88d8a3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #00b894;
+        }
+        
+        .highlight-box h4 {
+            color: #00b894;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 NỘI DUNG ICP</h1>
+            <p>Kế hoạch Chăm sóc Cá nhân hóa cho Người Cao Tuổi</p>
+        </div>
+        
+        <div class="icp-diagram">
+            <div class="central-circle">
+                🎯 ICP
+                <div class="subtitle">Individualized Care Plan</div>
+            </div>
+            
+            <div class="highlight-box">
+                <h4>🔍 Định nghĩa ICP</h4>
+                <p>Kế hoạch Chăm sóc Cá nhân hóa (ICP) là một tài liệu toàn diện được thiết kế riêng cho từng bệnh nhân cao tuổi, dựa trên đánh giá sức khỏe toàn diện và nhu cầu cá nhân để đảm bảo chăm sóc tối ưu và hiệu quả.</p>
+            </div>
+            
+            <div class="components-grid">
+                <div class="component-card component-1">
+                    <div class="component-header">
+                        <div class="component-icon">🎯</div>
+                        <div class="component-title">MỤC TIÊU ĐIỀU TRỊ</div>
+                    </div>
+                    <div class="component-content">
+                        <div class="priority-badge">ƯU TIÊN CAO</div>
+                        <ul class="component-list">
+                            <li>Mục tiêu ngắn hạn (1-3 tháng)</li>
+                            <li>Mục tiêu dài hạn (6-12 tháng)</li>
+                            <li>Cải thiện chức năng sinh hoạt</li>
+                            <li>Kiểm soát bệnh mãn tính</li>
+                            <li>Nâng cao chất lượng cuộc sống</li>
+                            <li>Phòng ngừa biến chứng</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="component-card component-2">
+                    <div class="component-header">
+                        <div class="component-icon">💊</div>
+                        <div class="component-title">PHÁC ĐỒ ĐIỀU TRỊ</div>
+                    </div>
+                    <div class="component-content">
+                        <ul class="component-list">
+                            <li>Danh sách thuốc chi tiết (tên, liều, cách dùng)</li>
+                            <li>Các can thiệp không dùng thuốc</li>
+                            <li>Vật lý trị liệu & phục hồi chức năng</li>
+                            <li>Chế độ dinh dưỡng cá nhân hóa</li>
+                            <li>Liệu pháp tâm lý (nếu cần)</li>
+                            <li>Thủ thuật y tế định kỳ</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="component-card component-3">
+                    <div class="component-header">
+                        <div class="component-icon">📅</div>
+                        <div class="component-title">LỊCH TRÌNH THEO DÕI</div>
+                    </div>
+                    <div class="component-content">
+                        <div class="timeline-badge">THEO DÕI ĐỀU ĐẶN</div>
+                        <ul class="component-list">
+                            <li>Lịch tái khám định kỳ</li>
+                            <li>Lịch xét nghiệm theo dõi</li>
+                            <li>Lịch đánh giá chức năng</li>
+                            <li>Lịch tiêm chủng</li>
+                            <li>Lịch sàng lọc ung thư</li>
+                            <li>Lịch khám chuyên khoa</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="component-card component-4">
+                    <div class="component-header">
+                        <div class="component-icon">🏥</div>
+                        <div class="component-title">DỊCH VỤ HỖ TRỢ</div>
+                    </div>
+                    <div class="component-content">
+                        <ul class="component-list">
+                            <li>Dịch vụ chăm sóc tại nhà</li>
+                            <li>Vận chuyển y tế</li>
+                            <li>Thiết bị hỗ trợ (walker, wheelchair)</li>
+                            <li>Dịch vụ dinh dưỡng</li>
+                            <li>Hỗ trợ tâm lý gia đình</li>
+                            <li>Kết nối dịch vụ xã hội</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="component-card component-5">
+                    <div class="component-header">
+                        <div class="component-icon">👨‍👩‍👧‍👦</div>
+                        <div class="component-title">VAI TRÒ GIA ĐÌNH</div>
+                    </div>
+                    <div class="component-content">
+                        <ul class="component-list">
+                            <li>Người chăm sóc chính được chỉ định</li>
+                            <li>Nhiệm vụ chăm sóc hàng ngày</li>
+                            <li>Kỹ năng cần được đào tạo</li>
+                            <li>Dấu hiệu cảnh báo cần báo cáo</li>
+                            <li>Hỗ trợ tâm lý cho người chăm sóc</li>
+                            <li>Kế hoạch nghỉ ngơi cho caregiver</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="component-card component-6">
+                    <div class="component-header">
+                        <div class="component-icon">💰</div>
+                        <div class="component-title">CHI PHÍ & BẢO HIỂM</div>
+                    </div>
+                    <div class="component-content">
+                        <div class="cost-badge">MINH BẠCH CHI PHÍ</div>
+                        <ul class="component-list">
+                            <li>Chi phí dự kiến từng dịch vụ</li>
+                            <li>Mức bảo hiểm chi trả</li>
+                            <li>Chi phí tự túi (out-of-pocket)</li>
+                            <li>Các gói dịch vụ ưu đãi</li>
+                            <li>Hỗ trợ chi phí cho gia đình khó khăn</li>
+                            <li>Kế hoạch thanh toán linh hoạt</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="component-card component-7">
+                    <div class="component-header">
+                        <div class="component-icon">⚠️</div>
+                        <div class="component-title">NGUY CƠ & CẢNH BÁO</div>
+                    </div>
+                    <div class="component-content">
+                        <ul class="component-list">
+                            <li>Nguy cơ té ngã và biện pháp phòng ngừa</li>
+                            <li>Tương tác thuốc cần tránh</li>
+                            <li>Dấu hiệu cấp cứu cần nhập viện</li>
+                            <li>Nguy cơ suy dinh dưỡng</li>
+                            <li>Biến chứng bệnh mãn tính</li>
+                            <li>Kế hoạch ứng phó khẩn cấp</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="component-card component-8">
+                    <div class="component-header">
+                        <div class="component-icon">🔄</div>
+                        <div class="component-title">TÁI ĐÁNH GIÁ & ĐIỀU CHỈNH</div>
+                    </div>
+                    <div class="component-content">
+                        <ul class="component-list">
+                            <li>Chu kỳ tái đánh giá (3-6 tháng)</li>
+                            <li>Chỉ số cần theo dõi thường xuyên</li>
+                            <li>Tiêu chí điều chỉnh kế hoạch</li>
+                            <li>Phản hồi từ bệnh nhân & gia đình</li>
+                            <li>Cập nhật mục tiêu điều trị</li>
+                            <li>Đánh giá hiệu quả can thiệp</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="process-flow">
+                <div class="process-title">🔄 QUY TRÌNH XÂY DỰNG ICP</div>
+                <div class="process-steps">
+                    <div class="process-step">
+                        <div class="step-circle">1</div>
+                        <div class="step-title">Thu thập</div>
+                        <div class="step-desc">Thông tin toàn diện</div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-circle">2</div>
+                        <div class="step-title">Phân tích</div>
+                        <div class="step-desc">Đánh giá nhu cầu</div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-circle">3</div>
+                        <div class="step-title">Lập kế hoạch</div>
+                        <div class="step-desc">Thiết kế cá nhân hóa</div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-circle">4</div>
+                        <div class="step-title">Thỏa thuận</div>
+                        <div class="step-desc">Với BN & gia đình</div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-circle">5</div>
+                        <div class="step-title">Thực hiện</div>
+                        <div class="step-desc">Triển khai kế hoạch</div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-circle">6</div>
+                        <div class="step-title">Theo dõi</div>
+                        <div class="step-desc">Đánh giá & điều chỉnh</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
