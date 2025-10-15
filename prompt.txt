@@ -4,18 +4,18 @@ Hãy tổng hợp thông tin một cách có cấu trúc, rõ ràng và súc tí
 
 1.  <p><strong>Tổng quan bệnh nhân:</strong></p> (Tóm tắt ngắn gọn thông tin hành chính, tuổi, giới tính, và tình trạng chung ban đầu của bệnh nhân.)
 2.  <p><strong>Vấn đề bệnh lý và tiền sử y tế:</strong></p> (Liệt kê các bệnh mãn tính hiện mắc, tiền sử phẫu thuật/nhập viện gần đây, và các bệnh có trong tiền sử gia đình.)
-3.  <p><strong>Tình trạng quản lý thuốc và chức năng giác quan:</strong></p> (Đánh giá số lượng thuốc đang dùng, khả năng tự quản lý thuốc, và các vấn đề về thị lực, thính lực, răng miệng...)
-4.  <p><strong>Khả năng sinh hoạt hàng ngày (ADLs/IADLs):</strong></p> (Nhận định mức độ độc lập của bệnh nhân trong các hoạt động sinh hoạt cơ bản và nâng cao, chỉ ra những hoạt động cần hỗ trợ.)
-5.  <p><strong>Tình trạng dinh dưỡng:</strong></p> (Đánh giá nguy cơ hoặc tình trạng suy dinh dưỡng dựa trên kết quả MNA-SF và các vấn đề liên quan đến ăn uống.)
-6.  <p><strong>Tình trạng tâm lý và nhận thức:</strong></p> (Đánh giá nguy cơ trầm cảm dựa trên GDS-SF và các dấu hiệu suy giảm nhận thức hoặc vấn đề hành vi.)
-7.  <p><strong>Nguy cơ té ngã:</strong></p> (Xác định mức độ rủi ro té ngã dựa trên tiền sử, các bài test chức năng (TUG), yếu tố môi trường, và các yếu tố khác.)
+3.  <p><strong>Tình trạng quản lý thuốc và chức năng giác quan:</strong></p> (Nêu các giá trị của công cụ, Đánh giá số lượng thuốc đang dùng, khả năng tự quản lý thuốc, và các vấn đề về thị lực, thính lực, răng miệng...)
+4.  <p><strong>Khả năng sinh hoạt hàng ngày (ADLs/IADLs):</strong></p> (Nêu các giá trị của công cụ, Nhận định mức độ độc lập của bệnh nhân trong các hoạt động sinh hoạt cơ bản và nâng cao, chỉ ra những hoạt động cần hỗ trợ.)
+5.  <p><strong>Tình trạng dinh dưỡng:</strong></p> (Nêu các giá trị của công cụ, Đánh giá nguy cơ hoặc tình trạng suy dinh dưỡng dựa trên kết quả MNA-SF và các vấn đề liên quan đến ăn uống.)
+6.  <p><strong>Tình trạng tâm lý và nhận thức:</strong></p> (Nêu các giá trị của công cụ, Đánh giá nguy cơ trầm cảm dựa trên GDS-SF và các dấu hiệu suy giảm nhận thức hoặc vấn đề hành vi.)
+7.  <p><strong>Nguy cơ té ngã:</strong></p> (Nêu các giá trị của công cụ, Xác định mức độ rủi ro té ngã dựa trên tiền sử, các bài test chức năng (TUG), yếu tố môi trường, và các yếu tố khác.)
 8.  <p><strong>Lối sống và các vấn đề khác:</strong></p> (Tóm tắt thói quen vận động, hút thuốc, uống rượu, chất lượng giấc ngủ, hoạt động xã hội và các triệu chứng khó chịu khác.)
 9.  <p><strong>Đề xuất các thăm khám chuyên sâu/can thiệp ưu tiên:</strong></p> (Dựa trên các vấn đề đã tổng hợp, đưa ra các gợi ý cụ thể về:
     * Các chuyên khoa cần thăm khám (kèm theo lý do chi tiết)(mức độ ưu tiên) (ví dụ: Nội tiết, Tim mạch, Nội Thần kinh, Hô hấp, Mắt, Răng hàm mặt, Tâm thần, Dinh dưỡng, Vật lý trị liệu, Phục hồi chức năng, Phẫu thuật thần kinh, Phẫu thuật lồng ngực mạch máu, Niệu khoa...).
     * Các xét nghiệm/thăm dò chức năng cần thiết (kèm theo lý do chi tiết)(mức độ ưu tiên) (ví dụ: CBC, chức năng thận, ion đồ, chức năng gan, Chức năng tuyến giáp, HbA1c,NT-proBNP, siêu âm tim, đo mật độ xương, X quang phổi, siêu âm bụng tổng quát, đánh giá nhận thức chi tiết).
     * Các can thiệp/tư vấn (kèm theo lý do chi tiết)(mức độ ưu tiên)(ví dụ: tư vấn dinh dưỡng, vật lý trị liệu, tư vấn tâm lý, hay khám tâm thần, điều chỉnh môi trường sống).
     * Ưu tiên những vấn đề cấp thiết hoặc có nguy cơ cao.)
-	*Vaccin khuyến cáo nếu thiếu loại nào trong các loại sau: Cúm mùa, COVID-19, Phế cầu khuẩn, Herpes Zoster (Shingrix), Tdap/Td
+	*Vaccin khuyến cáo nếu thiếu loại nào trong các loại sau: Cúm mùa, Phế cầu khuẩn, Herpes Zoster (Shingrix), Tdap/Td
 
 
 
