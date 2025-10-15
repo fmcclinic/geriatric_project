@@ -134,7 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const requestBody = {
                 contents: [{ parts: [{ text: promptContent + "\n\n--- Dữ liệu bệnh nhân ---\n" + summaryData }] }],
             };
-            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`;
+            // Dòng code đã sửa (Sử dụng 2.5-flash)
+                const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`;
             
             try {
                 const response = await fetch(API_URL, {
