@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bộ Câu Hỏi Sàng Lọc Sức Khỏe Toàn Diện cho Người Cao Tuổi</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/print_tools.css" media="print">
 </head>
 <body>
     <div class="container">
@@ -780,7 +781,7 @@
                     </div>
 
                     <div id="aiResponseSection">
-                        <label for="aiHtmlResponseContainer"><span class="bold-text">Gợi ý/Đánh giá từ AI (Gemini):</span></label>
+                        <label for="aiHtmlResponseContainer"><span class="bold-text">Gợi ý/Đánh giá từ AI:</span></label>
                         <div id="aiHtmlResponseContainer">
                             <p style="color: #777;">Kết quả phân tích từ AI sẽ hiển thị tại đây sau khi bạn nhấn nút 'Gửi AI đánh giá'.</p>
                         </div>
@@ -805,6 +806,7 @@
 
             <div class="form-footer">
                 <button type="button" id="sendToAiButton">Gửi AI đánh giá <span id="loadingSpinner"></span></button>
+                <button type="button" id="printButton" class="print-button">🖨️ In Kết Quả</button> 
                 <button type="submit">Gửi Kết Quả Sàng Lọc</button>
             </div>
         </form>
@@ -812,5 +814,6 @@
 
     <script src="js/form-handler.js" defer></script>
     <script src="js/api-communicator.js" defer></script>
+    <script src="js/print-handler.js" defer></script> 
 </body>
 </html>

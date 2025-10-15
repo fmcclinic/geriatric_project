@@ -1,0 +1,53 @@
+/* File: css/print.css */
+
+/* Chỉ áp dụng các quy tắc này khi in */
+@media print {
+
+    /* 1. Ẩn tất cả các phần tử theo mặc định */
+    body * {
+        visibility: hidden;
+    }
+
+    /* 2. Xác định các khu vực cần in và làm cho chúng hiển thị lại */
+    /* Chúng ta cần chọn section "Kết Luận" và section "Gợi ý AI" */
+    #screeningForm > section:last-of-type,
+    #aiResponseSection,
+    #screeningForm > section:last-of-type *,
+    #aiResponseSection * {
+        visibility: visible;
+    }
+
+    /* 3. Đặt các khu vực cần in lên trên cùng của trang in */
+    #screeningForm > section:last-of-type,
+    #aiResponseSection {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%; /* Đảm bảo nội dung chiếm hết chiều rộng trang in */
+    }
+
+    /* 4. Định vị lại khu vực AI để nó nằm ngay sau khu vực kết luận */
+    #aiResponseSection {
+        /* Chuyển nó xuống dưới khu vực kết luận */
+        /* Bạn có thể cần điều chỉnh giá trị 'top' này tùy theo nội dung */
+        top: auto; 
+        position: relative; /* Đặt lại position để nó xếp chồng bình thường */
+        margin-top: 20px; /* Thêm khoảng cách giữa 2 phần */
+    }
+
+    /* 5. Tùy chỉnh hiển thị để trang in đẹp hơn */
+    h1, h3 {
+        color: black !important;
+        text-align: left;
+    }
+
+    textarea, input {
+        border: 1px solid #ccc !important;
+        background-color: #f9f9f9 !important;
+    }
+    
+    /* Ẩn các phần không cần thiết bên trong khu vực in */
+    #apiKeyInputSection, #apiKeyButtons, #apiKeyStatusMessage, .form-footer {
+        display: none !important;
+    }
+}
